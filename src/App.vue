@@ -14,7 +14,7 @@
             <button
               @click="startEditEventName"
               class="text-slate-400 hover:text-indigo-500 transition-colors flex-shrink-0 p-1"
-              title="Rename event"
+              :title="$t('header.renameEvent')"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
@@ -32,29 +32,36 @@
               class="border border-indigo-400 rounded-md px-2 py-0.5 text-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 w-56"
             />
           </div>
-          <p class="text-xs text-slate-400 mt-0.5 leading-none">Reckoner</p>
+          <p class="text-xs text-slate-400 mt-0.5 leading-none">{{ $t('header.reckoner') }}</p>
         </div>
       </div>
 
       <!-- Right: Currency + Reset -->
       <div class="flex items-center gap-2 flex-shrink-0">
         <label class="flex items-center gap-1.5 text-sm text-slate-500">
-          <span class="hidden sm:inline whitespace-nowrap">Currency</span>
+          <span class="hidden sm:inline whitespace-nowrap">{{ $t('header.currency') }}</span>
           <input
             v-model="currency"
             maxlength="5"
             class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </label>
+        <select
+          v-model="locale"
+          class="border border-slate-300 rounded-md px-1.5 py-1 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white cursor-pointer"
+          :title="$t('header.language')"
+        >
+          <option v-for="lang in languages" :key="lang.code" :value="lang.code">{{ lang.label }}</option>
+        </select>
         <button
           @click="clearAll"
           class="flex items-center gap-1 text-red-400 hover:text-red-600 p-2 rounded-md hover:bg-red-50 transition-colors"
-          title="Reset all data"
+          :title="$t('header.resetAllData')"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
           </svg>
-          <span class="hidden sm:inline text-xs font-medium">Reset all</span>
+          <span class="hidden sm:inline text-xs font-medium">{{ $t('header.resetAll') }}</span>
         </button>
       </div>
 
@@ -73,7 +80,7 @@
           <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
             {{ participants.length }}
           </span>
-          <h2 class="font-semibold text-slate-700">Participants</h2>
+          <h2 class="font-semibold text-slate-700">{{ $t('participants.heading') }}</h2>
         </div>
 
         <div class="p-5">
@@ -83,21 +90,21 @@
               v-model="newParticipantName"
               @keyup.enter="addParticipant"
               @input="participantError = ''"
-              placeholder="Participant name…"
+              :placeholder="$t('participants.placeholder')"
               class="flex-1 border border-slate-300 rounded-lg px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
             <button
               @click="addParticipant"
               class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm px-4 py-2 rounded-lg font-medium transition-colors"
             >
-              Add
+              {{ $t('participants.add') }}
             </button>
           </div>
           <p v-if="participantError" class="text-red-500 text-xs mb-3 -mt-1">{{ participantError }}</p>
 
           <!-- Empty state -->
           <div v-if="participants.length === 0" class="text-center py-5 text-slate-400 text-sm">
-            Add at least one participant to get started.
+            {{ $t('participants.emptyState') }}
           </div>
 
           <!-- Participant chips -->
@@ -114,7 +121,7 @@
               <button
                 @click="removeParticipant(p.id)"
                 :disabled="!canDeleteParticipant(p.id)"
-                :title="canDeleteParticipant(p.id) ? 'Remove participant' : 'Cannot remove: appears in an expense'"
+                :title="canDeleteParticipant(p.id) ? $t('participants.removeTitle') : $t('participants.cantRemoveTitle')"
                 class="ml-0.5 transition-colors"
                 :class="canDeleteParticipant(p.id)
                   ? 'text-slate-400 hover:text-red-500 cursor-pointer'
@@ -136,12 +143,12 @@
             <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
               {{ expenses.length }}
             </span>
-            <h2 class="font-semibold text-slate-700">Expenses</h2>
+            <h2 class="font-semibold text-slate-700">{{ $t('expenses.heading') }}</h2>
           </div>
           <button
             @click="openAddModal"
             :disabled="participants.length === 0"
-            :title="participants.length === 0 ? 'Add participants first' : 'Add a new expense'"
+            :title="participants.length === 0 ? $t('expenses.addParticipantsFirst') : $t('expenses.addNewExpense')"
             class="hidden sm:flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-lg transition-colors flex-shrink-0"
             :class="participants.length > 0
               ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white'
@@ -150,7 +157,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
             </svg>
-            Add Expense
+            {{ $t('expenses.addExpense') }}
           </button>
         </div>
 
@@ -158,9 +165,9 @@
           <!-- Empty state -->
           <div v-if="expenses.length === 0" class="text-center py-10 text-slate-400">
             <div class="text-4xl mb-2">🧾</div>
-            <p class="text-sm">No expenses yet.</p>
-            <p v-if="participants.length === 0" class="text-xs mt-1">Add participants above first.</p>
-            <p v-else class="text-xs mt-1">Tap <strong>+</strong> to record the first one.</p>
+            <p class="text-sm">{{ $t('expenses.noExpensesYet') }}</p>
+            <p v-if="participants.length === 0" class="text-xs mt-1">{{ $t('expenses.addParticipantsAbove') }}</p>
+            <p v-else class="text-xs mt-1">{{ $t('expenses.tapToRecord') }}</p>
           </div>
 
           <!-- Expense rows -->
@@ -177,19 +184,19 @@
               <div class="flex-1 min-w-0">
                 <p class="font-medium text-slate-800 truncate leading-snug">{{ expense.description }}</p>
                 <p class="text-xs text-slate-500 mt-0.5">
-                  Paid by <strong class="text-slate-600">{{ participantName(expense.payerId) }}</strong>
+                  {{ $t('expenses.paidBy') }} <strong class="text-slate-600">{{ participantName(expense.payerId) }}</strong>
                   &middot;
                   split
-                  <span v-if="expense.participantIds.length === participants.length">everyone</span>
+                  <span v-if="expense.participantIds.length === participants.length">{{ $t('expenses.everyone') }}</span>
                   <span v-else>{{ expense.participantIds.map(id => participantName(id)).join(', ') }}</span>
                 </p>
               </div>
 
               <!-- Inline delete confirmation -->
               <div v-if="deleteConfirmId === expense.id" class="flex items-center gap-1.5 flex-shrink-0">
-                <span class="text-xs font-medium text-red-600">Delete?</span>
-                <button @click="deleteExpense(expense.id)" class="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 active:bg-red-700 px-2.5 py-1.5 rounded-md transition-colors">Yes</button>
-                <button @click="cancelDelete" class="text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md transition-colors">No</button>
+                <span class="text-xs font-medium text-red-600">{{ $t('expenses.deleteConfirm') }}</span>
+                <button @click="deleteExpense(expense.id)" class="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 active:bg-red-700 px-2.5 py-1.5 rounded-md transition-colors">{{ $t('expenses.yes') }}</button>
+                <button @click="cancelDelete" class="text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md transition-colors">{{ $t('expenses.no') }}</button>
               </div>
 
               <!-- Amount + action buttons -->
@@ -198,7 +205,7 @@
                 <button
                   @click="openEditModal(expense)"
                   class="p-2 text-slate-400 hover:text-indigo-500 transition-colors rounded-lg"
-                  title="Edit expense"
+                  :title="$t('expenses.editExpense')"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
@@ -207,7 +214,7 @@
                 <button
                   @click="confirmDelete(expense.id)"
                   class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg"
-                  title="Delete expense"
+                  :title="$t('expenses.deleteExpense')"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -218,7 +225,7 @@
 
             <!-- Total row -->
             <div class="flex justify-between items-center pt-3 border-t border-slate-100 text-sm">
-              <span class="text-slate-500">Total spent</span>
+              <span class="text-slate-500">{{ $t('expenses.totalSpent') }}</span>
               <span class="font-bold text-slate-800">{{ fmt(totalSpent) }}</span>
             </div>
           </div>
@@ -233,12 +240,12 @@
       <!-- ═══════════════════════════════════════════════ BALANCES SECTION -->
       <section class="bg-white rounded-xl border border-slate-200 shadow-sm">
         <div class="px-5 py-4 border-b border-slate-100">
-          <h2 class="font-semibold text-slate-700">Balances</h2>
-          <p class="text-xs text-slate-400 mt-0.5">+ is owed money &middot; − owes money</p>
+          <h2 class="font-semibold text-slate-700">{{ $t('balances.heading') }}</h2>
+          <p class="text-xs text-slate-400 mt-0.5">{{ $t('balances.legend') }}</p>
         </div>
         <div class="p-5">
           <div v-if="participants.length === 0" class="text-center py-4 text-slate-400 text-sm">
-            Add participants to see balances.
+            {{ $t('balances.emptyState') }}
           </div>
           <div v-else class="space-y-2">
             <div
@@ -274,7 +281,7 @@
               >
                 <template v-if="(balances[p.id] || 0) > 0.005">+{{ fmt(balances[p.id]) }}</template>
                 <template v-else-if="(balances[p.id] || 0) < -0.005">{{ fmt(balances[p.id]) }}</template>
-                <template v-else>settled</template>
+                <template v-else>{{ $t('balances.settled') }}</template>
               </span>
             </div>
           </div>
@@ -284,8 +291,8 @@
       <!-- ══════════════════════════════════════════ SPENDING SUMMARY SECTION -->
       <section v-if="hasData" class="bg-white rounded-xl border border-slate-200 shadow-sm">
         <div class="px-5 py-4 border-b border-slate-100">
-          <h2 class="font-semibold text-slate-700">Spending Summary</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Paid out of pocket vs. consumed share</p>
+          <h2 class="font-semibold text-slate-700">{{ $t('spendingSummary.heading') }}</h2>
+          <p class="text-xs text-slate-400 mt-0.5">{{ $t('spendingSummary.subtitle') }}</p>
         </div>
         <div class="p-5 space-y-3">
           <div v-for="p in participants" :key="p.id">
@@ -296,9 +303,9 @@
                 <span class="text-sm font-medium text-slate-700">{{ p.name }}</span>
               </div>
               <div class="text-xs text-slate-500 flex gap-3">
-                <span>Paid <strong class="text-slate-700">{{ fmt(spendingStats[p.id].paid) }}</strong></span>
+                <span>{{ $t('spendingSummary.paid') }} <strong class="text-slate-700">{{ fmt(spendingStats[p.id].paid) }}</strong></span>
                 <span class="text-slate-300">|</span>
-                <span>Share <strong class="text-slate-700">{{ fmt(spendingStats[p.id].share) }}</strong></span>
+                <span>{{ $t('spendingSummary.share') }} <strong class="text-slate-700">{{ fmt(spendingStats[p.id].share) }}</strong></span>
               </div>
             </div>
             <!-- Progress bar: paid portion over total spent -->
@@ -309,8 +316,8 @@
               ></div>
             </div>
             <div class="flex justify-between text-xs text-slate-400 mt-0.5">
-              <span>{{ totalSpent > 0 ? (spendingStats[p.id].paid / totalSpent * 100).toFixed(0) : 0 }}% of total paid</span>
-              <span>{{ totalSpent > 0 ? (spendingStats[p.id].share / totalSpent * 100).toFixed(0) : 0 }}% of total consumed</span>
+              <span>{{ totalSpent > 0 ? (spendingStats[p.id].paid / totalSpent * 100).toFixed(0) : 0 }}{{ $t('spendingSummary.ofTotalPaid') }}</span>
+              <span>{{ totalSpent > 0 ? (spendingStats[p.id].share / totalSpent * 100).toFixed(0) : 0 }}{{ $t('spendingSummary.ofTotalConsumed') }}</span>
             </div>
           </div>
         </div>
@@ -319,7 +326,7 @@
       <!-- ═══════════════════════════════════════════ SETTLEMENTS SECTION -->
       <section class="bg-white rounded-xl border border-slate-200 shadow-sm">
         <div class="px-5 py-4 border-b border-slate-100">
-          <h2 class="font-semibold text-slate-700 mb-3">Who Pays Whom</h2>
+          <h2 class="font-semibold text-slate-700 mb-3">{{ $t('settlements.heading') }}</h2>
           <!-- Mode toggle -->
           <div class="flex rounded-lg border border-slate-200 overflow-hidden text-xs font-medium">
             <button
@@ -328,29 +335,29 @@
               :class="settlementMode === 'minimize'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-white text-slate-500 hover:bg-slate-50'"
-              title="Fewest possible payments"
-            >Fewest payments</button>
+              :title="$t('settlements.fewestTitle')"
+            >{{ $t('settlements.fewestPayments') }}</button>
             <button
               @click="settlementMode = 'direct'"
               class="flex-1 px-3 py-1.5 transition-colors border-l border-slate-200"
               :class="settlementMode === 'direct'
                 ? 'bg-indigo-600 text-white'
                 : 'bg-white text-slate-500 hover:bg-slate-50'"
-              title="Each person pays who they actually owe"
-            >Pay directly</button>
+              :title="$t('settlements.directTitle')"
+            >{{ $t('settlements.payDirectly') }}</button>
           </div>
         </div>
         <div class="p-5">
 
           <!-- No expenses yet -->
           <div v-if="!hasData" class="text-center py-4 text-slate-400 text-sm">
-            Add expenses to see settlements.
+            {{ $t('settlements.emptyState') }}
           </div>
 
           <!-- All settled -->
           <div v-else-if="allSettled" class="text-center py-6">
             <div class="text-3xl mb-2">🎉</div>
-            <p class="font-semibold text-emerald-600 text-sm">Everyone is settled up!</p>
+            <p class="font-semibold text-emerald-600 text-sm">{{ $t('settlements.allSettled') }}</p>
           </div>
 
           <!-- Settlement transactions -->
@@ -383,8 +390,8 @@
     v-if="participants.length > 0"
     @click="openAddModal"
     class="sm:hidden fixed bottom-6 right-6 z-20 w-14 h-14 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-full shadow-xl flex items-center justify-center transition-colors"
-    title="Add expense"
-    aria-label="Add expense"
+    :title="$t('expenses.addExpense')"
+    :aria-label="$t('expenses.addExpense')"
   >
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
       <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
@@ -401,12 +408,12 @@
       <!-- Modal header -->
       <div class="flex items-center justify-between mb-5">
         <h3 id="modal-title" class="text-lg font-semibold text-slate-800">
-          {{ editingExpenseId ? 'Edit Expense' : 'New Expense' }}
+          {{ editingExpenseId ? $t('modal.editExpense') : $t('modal.newExpense') }}
         </h3>
         <button
           @click="closeModal"
           class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg"
-          aria-label="Close"
+          :aria-label="$t('modal.close')"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -416,20 +423,20 @@
 
       <!-- Description -->
       <div class="mb-4">
-        <label for="f-desc" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+        <label for="f-desc" class="block text-sm font-medium text-slate-700 mb-1">{{ $t('modal.descriptionLabel') }}</label>
         <input
           id="f-desc"
           ref="descInput"
           v-model="form.description"
           @input="formError = ''"
-          placeholder="e.g. Dinner, Taxi, Groceries…"
+          :placeholder="$t('modal.descriptionPlaceholder')"
           class="w-full border border-slate-300 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
         />
       </div>
 
       <!-- Amount -->
       <div class="mb-4">
-        <label for="f-amount" class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
+        <label for="f-amount" class="block text-sm font-medium text-slate-700 mb-1">{{ $t('modal.amountLabel') }}</label>
         <div class="relative">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm select-none pointer-events-none">
             {{ currency }}
@@ -449,14 +456,14 @@
 
       <!-- Paid by -->
       <div class="mb-4">
-        <label for="f-payer" class="block text-sm font-medium text-slate-700 mb-1">Paid by</label>
+        <label for="f-payer" class="block text-sm font-medium text-slate-700 mb-1">{{ $t('modal.paidByLabel') }}</label>
         <select
           id="f-payer"
           v-model="form.payerId"
           @change="formError = ''"
           class="w-full border border-slate-300 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent bg-white"
         >
-          <option value="" disabled>Select who paid…</option>
+          <option value="" disabled>{{ $t('modal.selectWhoPaid') }}</option>
           <option v-for="p in participants" :key="p.id" :value="p.id">{{ p.name }}</option>
         </select>
       </div>
@@ -464,11 +471,11 @@
       <!-- Split between -->
       <div class="mb-5">
         <div class="flex items-center justify-between mb-2">
-          <label class="text-sm font-medium text-slate-700">Split between</label>
+          <label class="text-sm font-medium text-slate-700">{{ $t('modal.splitBetween') }}</label>
           <div class="flex gap-2 text-xs">
-            <button @click="selectAllParticipants" class="text-indigo-500 hover:text-indigo-700 font-medium transition-colors">All</button>
+            <button @click="selectAllParticipants" class="text-indigo-500 hover:text-indigo-700 font-medium transition-colors">{{ $t('modal.all') }}</button>
             <span class="text-slate-300">|</span>
-            <button @click="clearAllParticipants" class="text-slate-400 hover:text-slate-600 transition-colors">None</button>
+            <button @click="clearAllParticipants" class="text-slate-400 hover:text-slate-600 transition-colors">{{ $t('modal.none') }}</button>
           </div>
         </div>
 
@@ -497,9 +504,9 @@
 
         <!-- Per-person share preview -->
         <p class="text-xs text-slate-400 mt-2">
-          {{ form.participantIds.length }} of {{ participants.length }} selected
+          {{ $t('modal.selectedOf', { count: form.participantIds.length, total: participants.length }) }}
           <template v-if="sharePreview !== null">
-            &middot; <strong class="text-slate-500">{{ fmt(sharePreview) }}</strong> each
+            &middot; <strong class="text-slate-500">{{ fmt(sharePreview) }}</strong> {{ $t('modal.each') }}
           </template>
         </p>
       </div>
@@ -515,13 +522,13 @@
           @click="closeModal"
           class="py-3 sm:py-2 px-4 text-sm text-slate-600 hover:text-slate-800 font-medium rounded-lg hover:bg-slate-100 transition-colors"
         >
-          Cancel
+          {{ $t('modal.cancel') }}
         </button>
         <button
           @click="saveExpense"
           class="py-3 sm:py-2 px-5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-lg transition-colors"
         >
-          {{ editingExpenseId ? 'Save Changes' : 'Add Expense' }}
+          {{ editingExpenseId ? $t('modal.saveChanges') : $t('modal.addExpense') }}
         </button>
       </div>
 
@@ -533,16 +540,40 @@
 
 <script>
 const STORAGE_KEY = 'reckoner-v1';
+const LOCALE_KEY = 'reckoner-locale';
+const SUPPORTED_LOCALES = ['en', 'tr', 'pl', 'ru', 'de', 'fr', 'it', 'es'];
+const LANGUAGES = [
+  { code: 'en', label: '🇬🇧 English' },
+  { code: 'tr', label: '🇹🇷 Türkçe' },
+  { code: 'pl', label: '🇵🇱 Polski' },
+  { code: 'ru', label: '🇷🇺 Русский' },
+  { code: 'de', label: '🇩🇪 Deutsch' },
+  { code: 'fr', label: '🇫🇷 Français' },
+  { code: 'it', label: '🇮🇹 Italiano' },
+  { code: 'es', label: '🇪🇸 Español' },
+];
 
 export default {
   name: 'App',
 
   data() {
     return {
-      eventName: 'My Event',
+      eventName: '',
       currency: 'zł',
       participants: [],
       expenses: [],
+
+      // Language
+      locale: (() => {
+        try {
+          const s = localStorage.getItem(LOCALE_KEY);
+          if (s && SUPPORTED_LOCALES.includes(s)) return s;
+          const b = (navigator.language || 'en').split('-')[0].toLowerCase();
+          if (SUPPORTED_LOCALES.includes(b)) return b;
+        } catch (_) {}
+        return 'en';
+      })(),
+      languages: LANGUAGES,
 
       // Participant input
       newParticipantName: '',
@@ -739,11 +770,17 @@ export default {
     eventName() { this.persist(); },
     currency() { this.persist(); },
     participants: { deep: true, handler() { this.persist(); } },
-    expenses: { deep: true, handler() { this.persist(); } }
+    expenses: { deep: true, handler() { this.persist(); } },
+    locale(val) {
+      this.$i18n.locale = val;
+      try { localStorage.setItem(LOCALE_KEY, val); } catch (_) {}
+    }
   },
 
   created() {
     this.restore();
+    this.$i18n.locale = this.locale;
+    if (!this.eventName) this.eventName = this.$t('defaults.eventName');
   },
 
   mounted() {
@@ -798,7 +835,7 @@ export default {
     },
 
     participantName(id) {
-      return this.participantMap[id]?.name ?? '(unknown)';
+      return this.participantMap[id]?.name ?? this.$t('defaults.unknown');
     },
 
     onKeyDown(e) {
@@ -828,11 +865,11 @@ export default {
     addParticipant() {
       const name = this.newParticipantName.trim();
       if (!name) {
-        this.participantError = 'Please enter a name.';
+        this.participantError = this.$t('errors.enterName');
         return;
       }
       if (this.participants.some(p => p.name.toLowerCase() === name.toLowerCase())) {
-        this.participantError = `"${name}" is already in the list.`;
+        this.participantError = this.$t('errors.alreadyInList', { name });
         return;
       }
       this.participants.push({ id: this.uid(), name });
@@ -894,19 +931,19 @@ export default {
       const amount = parseFloat(this.form.amount);
 
       if (!desc) {
-        this.formError = 'Please enter a description.';
+        this.formError = this.$t('errors.enterDescription');
         return;
       }
       if (isNaN(amount) || amount <= 0) {
-        this.formError = 'Enter a valid amount greater than 0.';
+        this.formError = this.$t('errors.validAmount');
         return;
       }
       if (!this.form.payerId) {
-        this.formError = 'Please select who paid.';
+        this.formError = this.$t('errors.selectPayer');
         return;
       }
       if (this.form.participantIds.length === 0) {
-        this.formError = 'Select at least one participant to split this expense with.';
+        this.formError = this.$t('errors.selectParticipants');
         return;
       }
 
@@ -942,10 +979,10 @@ export default {
     },
 
     clearAll() {
-      if (confirm('Reset everything and start over? All data will be permanently lost.')) {
+      if (confirm(this.$t('confirms.resetAll'))) {
         this.participants = [];
         this.expenses = [];
-        this.eventName = 'My Event';
+        this.eventName = this.$t('defaults.eventName');
         this.currency = 'zł';
         this.deleteConfirmId = null;
         try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
