@@ -1,4 +1,5 @@
 <template>
+  <div class="bg-slate-100 min-h-screen">
   <!-- ═══════════════════════════════════════════════════════════════ HEADER -->
   <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -12,7 +13,7 @@
             <h1 class="text-xl font-bold text-slate-800 leading-none truncate">{{ eventName }}</h1>
             <button
               @click="startEditEventName"
-              class="text-slate-400 hover:text-indigo-500 transition-colors flex-shrink-0"
+              class="text-slate-400 hover:text-indigo-500 transition-colors flex-shrink-0 p-1"
               title="Rename event"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -36,20 +37,24 @@
       </div>
 
       <!-- Right: Currency + Reset -->
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <label class="flex items-center gap-1.5 text-sm text-slate-500 whitespace-nowrap">
-          Currency
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <label class="flex items-center gap-1.5 text-sm text-slate-500">
+          <span class="hidden sm:inline whitespace-nowrap">Currency</span>
           <input
             v-model="currency"
             maxlength="5"
-            class="border border-slate-300 rounded-md px-2 py-1 w-16 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </label>
         <button
           @click="clearAll"
-          class="text-xs text-red-400 hover:text-red-600 px-2 py-1.5 rounded-md hover:bg-red-50 transition-colors font-medium whitespace-nowrap"
+          class="flex items-center gap-1 text-red-400 hover:text-red-600 p-2 rounded-md hover:bg-red-50 transition-colors"
+          title="Reset all data"
         >
-          Reset all
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <span class="hidden sm:inline text-xs font-medium">Reset all</span>
         </button>
       </div>
 
@@ -57,7 +62,7 @@
   </header>
 
   <!-- ════════════════════════════════════════════════════════════════ MAIN -->
-  <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+  <main class="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
     <!-- ───────────────────────────── Left+Centre: Participants & Expenses -->
     <div class="lg:col-span-2 space-y-6">
@@ -79,7 +84,7 @@
               @keyup.enter="addParticipant"
               @input="participantError = ''"
               placeholder="Participant name…"
-              class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+              class="flex-1 border border-slate-300 rounded-lg px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
             <button
               @click="addParticipant"
@@ -137,7 +142,7 @@
             @click="openAddModal"
             :disabled="participants.length === 0"
             :title="participants.length === 0 ? 'Add participants first' : 'Add a new expense'"
-            class="flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-lg transition-colors flex-shrink-0"
+            class="hidden sm:flex items-center gap-1.5 text-sm font-medium px-4 py-1.5 rounded-lg transition-colors flex-shrink-0"
             :class="participants.length > 0
               ? 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white'
               : 'bg-slate-100 text-slate-400 cursor-not-allowed'"
@@ -155,7 +160,7 @@
             <div class="text-4xl mb-2">🧾</div>
             <p class="text-sm">No expenses yet.</p>
             <p v-if="participants.length === 0" class="text-xs mt-1">Add participants above first.</p>
-            <p v-else class="text-xs mt-1">Hit "Add Expense" to record the first one.</p>
+            <p v-else class="text-xs mt-1">Tap <strong>+</strong> to record the first one.</p>
           </div>
 
           <!-- Expense rows -->
@@ -181,19 +186,18 @@
               </div>
 
               <!-- Inline delete confirmation -->
-              <div v-if="deleteConfirmId === expense.id" class="flex items-center gap-1 text-xs text-red-600 flex-shrink-0">
-                <span class="font-medium">Delete?</span>
-                <button @click="deleteExpense(expense.id)" class="underline hover:no-underline font-semibold">Yes</button>
-                <span class="text-slate-300">/</span>
-                <button @click="cancelDelete" class="text-slate-500 underline hover:no-underline">No</button>
+              <div v-if="deleteConfirmId === expense.id" class="flex items-center gap-1.5 flex-shrink-0">
+                <span class="text-xs font-medium text-red-600">Delete?</span>
+                <button @click="deleteExpense(expense.id)" class="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 active:bg-red-700 px-2.5 py-1.5 rounded-md transition-colors">Yes</button>
+                <button @click="cancelDelete" class="text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md transition-colors">No</button>
               </div>
 
               <!-- Amount + action buttons -->
-              <div class="flex items-center gap-2 flex-shrink-0">
-                <span class="font-semibold text-slate-800">{{ fmt(expense.amount) }}</span>
+              <div class="flex items-center gap-0.5 flex-shrink-0">
+                <span class="font-semibold text-slate-800 mr-1 text-sm">{{ fmt(expense.amount) }}</span>
                 <button
                   @click="openEditModal(expense)"
-                  class="text-slate-400 hover:text-indigo-500 transition-colors"
+                  class="p-2 text-slate-400 hover:text-indigo-500 transition-colors rounded-lg"
                   title="Edit expense"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -202,7 +206,7 @@
                 </button>
                 <button
                   @click="confirmDelete(expense.id)"
-                  class="text-slate-400 hover:text-red-500 transition-colors"
+                  class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg"
                   title="Delete expense"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -374,9 +378,25 @@
 
   </main>
 
+  <!-- ══════════════════════════════════════ FAB — Add Expense (mobile only) -->
+  <button
+    v-if="participants.length > 0"
+    @click="openAddModal"
+    class="sm:hidden fixed bottom-6 right-6 z-20 w-14 h-14 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-full shadow-xl flex items-center justify-center transition-colors"
+    title="Add expense"
+    aria-label="Add expense"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+    </svg>
+  </button>
+
   <!-- ═══════════════════════════════════════════════════════════ ADD/EDIT MODAL -->
   <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+      <!-- Drag handle (mobile bottom-sheet indicator) -->
+      <div class="w-10 h-1 bg-slate-300 rounded-full mx-auto mb-4 sm:hidden"></div>
 
       <!-- Modal header -->
       <div class="flex items-center justify-between mb-5">
@@ -385,7 +405,7 @@
         </h3>
         <button
           @click="closeModal"
-          class="text-slate-400 hover:text-slate-600 transition-colors p-0.5 rounded"
+          class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg"
           aria-label="Close"
         >
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -403,7 +423,7 @@
           v-model="form.description"
           @input="formError = ''"
           placeholder="e.g. Dinner, Taxi, Groceries…"
-          class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+          class="w-full border border-slate-300 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
         />
       </div>
 
@@ -422,7 +442,7 @@
             step="0.01"
             placeholder="0.00"
             @input="formError = ''"
-            class="w-full border border-slate-300 rounded-lg pl-10 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+            class="w-full border border-slate-300 rounded-lg pl-10 pr-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
           />
         </div>
       </div>
@@ -434,7 +454,7 @@
           id="f-payer"
           v-model="form.payerId"
           @change="formError = ''"
-          class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent bg-white"
+          class="w-full border border-slate-300 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent bg-white"
         >
           <option value="" disabled>Select who paid…</option>
           <option v-for="p in participants" :key="p.id" :value="p.id">{{ p.name }}</option>
@@ -457,7 +477,7 @@
           <label
             v-for="p in participants"
             :key="p.id"
-            class="flex items-center gap-2 p-2 rounded-lg border cursor-pointer select-none transition-colors"
+            class="flex items-center gap-2 p-3 rounded-lg border cursor-pointer select-none transition-colors min-h-[48px]"
             :class="form.participantIds.includes(p.id)
               ? 'bg-indigo-50 border-indigo-300'
               : 'bg-slate-50 border-slate-200 hover:border-slate-300'"
@@ -466,7 +486,7 @@
               type="checkbox"
               v-model="form.participantIds"
               :value="p.id"
-              class="accent-indigo-600 cursor-pointer flex-shrink-0"
+              class="accent-indigo-600 cursor-pointer flex-shrink-0 w-4 h-4"
             />
             <span
               class="text-sm font-medium truncate"
@@ -489,17 +509,17 @@
         {{ formError }}
       </div>
 
-      <!-- Action buttons -->
-      <div class="flex gap-3 justify-end pt-1">
+      <!-- Action buttons — stacked on mobile, side-by-side on sm+ -->
+      <div class="flex flex-col-reverse sm:flex-row gap-2 sm:justify-end pt-1">
         <button
           @click="closeModal"
-          class="px-4 py-2 text-sm text-slate-600 hover:text-slate-800 font-medium rounded-lg hover:bg-slate-100 transition-colors"
+          class="py-3 sm:py-2 px-4 text-sm text-slate-600 hover:text-slate-800 font-medium rounded-lg hover:bg-slate-100 transition-colors"
         >
           Cancel
         </button>
         <button
           @click="saveExpense"
-          class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-lg transition-colors"
+          class="py-3 sm:py-2 px-5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-lg transition-colors"
         >
           {{ editingExpenseId ? 'Save Changes' : 'Add Expense' }}
         </button>
@@ -507,6 +527,8 @@
 
     </div>
   </div><!-- /modal -->
+
+  </div><!-- /root -->
 </template>
 
 <script>
