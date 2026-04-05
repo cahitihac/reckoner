@@ -32,7 +32,7 @@
               class="border border-indigo-400 rounded-md px-2 py-0.5 text-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 w-56"
             />
           </div>
-          <p class="text-xs text-slate-400 mt-0.5 leading-none">Group expense splitter</p>
+          <p class="text-xs text-slate-400 mt-0.5 leading-none">Reckoner</p>
         </div>
       </div>
 
@@ -532,14 +532,14 @@
 </template>
 
 <script>
-const STORAGE_KEY = 'expense-splitter-v1';
+const STORAGE_KEY = 'reckoner-v1';
 
 export default {
   name: 'App',
 
   data() {
     return {
-      eventName: 'Group Event',
+      eventName: 'My Event',
       currency: 'zł',
       participants: [],
       expenses: [],
@@ -945,7 +945,7 @@ export default {
       if (confirm('Reset everything and start over? All data will be permanently lost.')) {
         this.participants = [];
         this.expenses = [];
-        this.eventName = 'Group Event';
+        this.eventName = 'My Event';
         this.currency = 'zł';
         this.deleteConfirmId = null;
         try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
