@@ -1,5 +1,6 @@
 <template>
   <div class="bg-slate-100 min-h-screen">
+  <Analytics />
   <!-- ═══════════════════════════════════════════════════════════════ HEADER -->
   <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -557,8 +558,25 @@
     </div>
   </div><!-- /modal -->
 
+  <!-- ═══════════════════════════════════════════════════════════════ FOOTER -->
+  <footer class="text-center py-6 mt-2">
+    <a
+      href="https://buymeacoffee.com/cahitihac"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 bg-[#FFDD00] hover:bg-[#ffcf00] active:bg-[#f5c400] text-[#000000] text-sm font-semibold px-4 py-2 rounded-full shadow-sm transition-colors"
+    >
+      <span class="text-base">☕</span>
+      Buy me a coffee
+    </a>
+  </footer>
+
   </div><!-- /root -->
 </template>
+
+<script setup>
+import { Analytics } from '@vercel/analytics/vue';
+</script>
 
 <script>
 const STORAGE_KEY = 'reckoner-v1';
