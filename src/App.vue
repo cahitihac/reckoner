@@ -46,13 +46,35 @@
             class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </label>
-        <select
-          v-model="locale"
-          class="border border-slate-300 rounded-md px-1.5 py-1 text-xs text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white cursor-pointer"
-          :title="$t('header.language')"
-        >
-          <option v-for="lang in languages" :key="lang.code" :value="lang.code">{{ lang.label }}</option>
-        </select>
+        <!-- Language picker -->
+        <div class="relative">
+          <button
+            @click="showLangMenu = !showLangMenu"
+            class="flex items-center gap-1 border border-slate-300 rounded-md px-2 py-1 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+            :title="$t('header.language')"
+          >
+            <span class="text-base leading-none">{{ currentLang.flag }}</span>
+            <span class="hidden sm:inline text-xs text-slate-600">{{ currentLang.name }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="hidden sm:block h-3 w-3 text-slate-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+          <div v-if="showLangMenu">
+            <div class="fixed inset-0 z-40" @click="showLangMenu = false"></div>
+            <div class="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 py-1 min-w-max">
+              <button
+                v-for="lang in languages"
+                :key="lang.code"
+                @click="locale = lang.code; showLangMenu = false"
+                class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-slate-50 transition-colors"
+                :class="locale === lang.code ? 'font-semibold text-indigo-600' : 'text-slate-700'"
+              >
+                <span>{{ lang.flag }}</span>
+                <span>{{ lang.name }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
         <button
           @click="clearAll"
           class="flex items-center gap-1 text-red-400 hover:text-red-600 p-2 rounded-md hover:bg-red-50 transition-colors"
@@ -543,14 +565,14 @@ const STORAGE_KEY = 'reckoner-v1';
 const LOCALE_KEY = 'reckoner-locale';
 const SUPPORTED_LOCALES = ['en', 'tr', 'pl', 'ru', 'de', 'fr', 'it', 'es'];
 const LANGUAGES = [
-  { code: 'en', label: '🇬🇧 English' },
-  { code: 'tr', label: '🇹🇷 Türkçe' },
-  { code: 'pl', label: '🇵🇱 Polski' },
-  { code: 'ru', label: '🇷🇺 Русский' },
-  { code: 'de', label: '🇩🇪 Deutsch' },
-  { code: 'fr', label: '🇫🇷 Français' },
-  { code: 'it', label: '🇮🇹 Italiano' },
-  { code: 'es', label: '🇪🇸 Español' },
+  { code: 'en', flag: '🇬🇧', name: 'English' },
+  { code: 'tr', flag: '🇹🇷', name: 'Türkçe' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski' },
+  { code: 'ru', flag: '🇷🇺', name: 'Русский' },
+  { code: 'de', flag: '🇩🇪', name: 'Deutsch' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français' },
+  { code: 'it', flag: '🇮🇹', name: 'Italiano' },
+  { code: 'es', flag: '🇪🇸', name: 'Español' },
 ];
 
 export default {
@@ -574,6 +596,7 @@ export default {
         return 'en';
       })(),
       languages: LANGUAGES,
+      showLangMenu: false,
 
       // Participant input
       newParticipantName: '',
@@ -603,6 +626,10 @@ export default {
   },
 
   computed: {
+    currentLang() {
+      return this.languages.find(l => l.code === this.locale) || this.languages[0];
+    },
+
     participantMap() {
       const map = {};
       this.participants.forEach(p => { map[p.id] = p; });
