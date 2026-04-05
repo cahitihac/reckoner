@@ -1,6 +1,5 @@
 <template>
   <div class="bg-slate-100 min-h-screen">
-  <Analytics />
   <!-- ═══════════════════════════════════════════════════════════════ HEADER -->
   <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -573,10 +572,6 @@
 
   </div><!-- /root -->
 </template>
-
-<script setup>
-import { Analytics } from '@vercel/analytics/vue';
-</script>
 
 <script>
 const STORAGE_KEY = 'reckoner-v1';
