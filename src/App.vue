@@ -6,7 +6,7 @@
 
       <!-- Left: Event name -->
       <div class="flex items-center gap-3 min-w-0">
-        <span class="text-2xl select-none flex-shrink-0">🎉</span>
+        <img src="/logo.svg" alt="Reckoner" class="w-9 h-9 flex-shrink-0 select-none" />
         <div class="min-w-0">
           <!-- Display mode -->
           <div v-if="!editingEventName" class="flex items-center gap-1.5">
