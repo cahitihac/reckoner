@@ -22,6 +22,9 @@ const messages = {
       resetAll: 'Reset all',
       resetAllData: 'Reset all data',
       language: 'Language',
+      shareEvent: 'Share',
+      copyLink: 'Copy link',
+      linkCopied: 'Copied!',
     },
     participants: {
       heading: 'Participants',
@@ -96,6 +99,7 @@ const messages = {
       validAmount: 'Enter a valid amount greater than 0.',
       selectPayer: 'Please select who paid.',
       selectParticipants: 'Select at least one participant to split this expense with.',
+      shareLoad: 'Could not load the shared event. The link may be invalid or expired.',
     },
     confirms: {
       resetAll: 'Reset everything and start over? All data will be permanently lost.',
@@ -103,6 +107,13 @@ const messages = {
     defaults: {
       eventName: 'My Event',
       unknown: '(unknown)',
+    },
+    share: {
+      readOnlyBanner: "You\'re viewing a shared event (read-only).",
+      makeACopy: 'Make a copy to edit',
+      copyOf: 'Copy of {name}',
+      modalTitle: 'Share this event',
+      modalDesc: 'Anyone with this link can view the event.',
     },
   },
 
@@ -114,6 +125,9 @@ const messages = {
       resetAll: 'S\u0131f\u0131rla',
       resetAllData: 'T\u00fcm verileri s\u0131f\u0131rla',
       language: 'Dil',
+      shareEvent: 'Payla\u015f',
+      copyLink: 'Ba\u011flant\u0131y\u0131 kopyala',
+      linkCopied: 'Kopyaland\u0131!',
     },
     participants: {
       heading: 'Kat\u0131l\u0131mc\u0131lar',
@@ -188,6 +202,7 @@ const messages = {
       validAmount: "0'dan b\u00fcy\u00fck ge\u00e7erli bir tutar girin.",
       selectPayer: 'L\u00fctfen \u00f6deyeni se\u00e7in.',
       selectParticipants: 'Bu harcamay\u0131 b\u00f6l\u00fc\u015fmek i\u00e7in en az bir kat\u0131l\u0131mc\u0131 se\u00e7in.',
+      shareLoad: 'Payla\u015f\u0131lan etkinlik y\u00fcklenemedi. Ba\u011flant\u0131 ge\u00e7ersiz veya s\u00fcresi dolmu\u015f olabilir.',
     },
     confirms: {
       resetAll: 'Her \u015fey s\u0131f\u0131rlans\u0131n m\u0131? T\u00fcm veriler kal\u0131c\u0131 olarak silinecek.',
@@ -195,6 +210,13 @@ const messages = {
     defaults: {
       eventName: 'Etkinli\u011fim',
       unknown: '(bilinmiyor)',
+    },
+    share: {
+      readOnlyBanner: 'Payla\u015f\u0131lan bir etkinli\u011fi g\u00f6r\u00fcnt\u00fcl\u00fcyorsunuz (salt okunur).',
+      makeACopy: 'D\u00fczenlemek i\u00e7in kopya olu\u015ftur',
+      copyOf: '{name} kopyas\u0131',
+      modalTitle: 'Bu etkinli\u011fi payla\u015f',
+      modalDesc: 'Bu ba\u011flant\u0131ya sahip olan herkes etkinli\u011fi g\u00f6rebilir.',
     },
   },
 
@@ -206,6 +228,9 @@ const messages = {
       resetAll: 'Resetuj',
       resetAllData: 'Zresetuj wszystkie dane',
       language: 'J\u0119zyk',
+      shareEvent: 'Udost\u0119pnij',
+      copyLink: 'Kopiuj link',
+      linkCopied: 'Skopiowano!',
     },
     participants: {
       heading: 'Uczestnicy',
@@ -280,6 +305,7 @@ const messages = {
       validAmount: 'Podaj prawid\u0142ow\u0105 kwot\u0119 wi\u0119ksz\u0105 ni\u017c 0.',
       selectPayer: 'Prosz\u0119 wybra\u0107 osob\u0119, kt\u00f3ra zap\u0142aci\u0142a.',
       selectParticipants: 'Wybierz przynajmniej jednego uczestnika do podzia\u0142u wydatku.',
+      shareLoad: 'Nie mo\u017cna za\u0142adowa\u0107 udost\u0119pnionego wydarzenia. Link mo\u017ce by\u0107 nieprawid\u0142owy lub wygas\u0142y.',
     },
     confirms: {
       resetAll: 'Zresetowa\u0107 wszystko i zacz\u0105\u0107 od nowa? Wszystkie dane zostan\u0105 trwale usuni\u0119te.',
@@ -287,6 +313,13 @@ const messages = {
     defaults: {
       eventName: 'Moje wydarzenie',
       unknown: '(nieznany)',
+    },
+    share: {
+      readOnlyBanner: 'Przegl\u0105dasz udost\u0119pnione wydarzenie (tylko do odczytu).',
+      makeACopy: 'Utw\u00f3rz kopi\u0119, aby edytowa\u0107',
+      copyOf: 'Kopia {name}',
+      modalTitle: 'Udost\u0119pnij to wydarzenie',
+      modalDesc: 'Ka\u017cdy z tym linkiem mo\u017ce obejrze\u0107 wydarzenie.',
     },
   },
 
@@ -298,6 +331,9 @@ const messages = {
       resetAll: '\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c',
       resetAllData: '\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0432\u0441\u0435 \u0434\u0430\u043d\u043d\u044b\u0435',
       language: '\u042f\u0437\u044b\u043a',
+      shareEvent: '\u041f\u043e\u0434\u0435\u043b\u0438\u0442\u044c\u0441\u044f',
+      copyLink: '\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0443',
+      linkCopied: '\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e!',
     },
     participants: {
       heading: '\u0423\u0447\u0430\u0441\u0442\u043d\u0438\u043a\u0438',
@@ -372,6 +408,7 @@ const messages = {
       validAmount: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0441\u0443\u043c\u043c\u0443 \u0431\u043e\u043b\u044c\u0448\u0435 0.',
       selectPayer: '\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043f\u043b\u0430\u0442\u0435\u043b\u044c\u0449\u0438\u043a\u0430.',
       selectParticipants: '\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0445\u043e\u0442\u044f \u0431\u044b \u043e\u0434\u043d\u043e\u0433\u043e \u0443\u0447\u0430\u0441\u0442\u043d\u0438\u043a\u0430 \u0434\u043b\u044f \u0440\u0430\u0437\u0434\u0435\u043b\u0435\u043d\u0438\u044f \u0440\u0430\u0441\u0445\u043e\u0434\u0430.',
+      shareLoad: '\u041d\u0435 \u0443\u0434\u0430\u043b\u043e\u0441\u044c \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u043e\u0431\u0449\u0435\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435. \u0421\u0441\u044b\u043b\u043a\u0430 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043d\u0435\u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u0438\u043b\u0438 \u0443\u0441\u0442\u0430\u0440\u0435\u0432\u0448\u0435\u0439.',
     },
     confirms: {
       resetAll: '\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0432\u0441\u0451 \u0438 \u043d\u0430\u0447\u0430\u0442\u044c \u0437\u0430\u043d\u043e\u0432\u043e? \u0412\u0441\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 \u0431\u0443\u0434\u0443\u0442 \u0431\u0435\u0437\u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043d\u043e \u0443\u0434\u0430\u043b\u0435\u043d\u044b.',
@@ -379,6 +416,13 @@ const messages = {
     defaults: {
       eventName: '\u041c\u043e\u0451 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435',
       unknown: '(\u043d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u043e)',
+    },
+    share: {
+      readOnlyBanner: '\u0412\u044b \u043f\u0440\u043e\u0441\u043c\u0430\u0442\u0440\u0438\u0432\u0430\u0435\u0442\u0435 \u043e\u0431\u0449\u0435\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435 (\u0442\u043e\u043b\u044c\u043a\u043e \u0447\u0442\u0435\u043d\u0438\u0435).',
+      makeACopy: '\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u043a\u043e\u043f\u0438\u044e \u0434\u043b\u044f \u0440\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f',
+      copyOf: '\u041a\u043e\u043f\u0438\u044f {name}',
+      modalTitle: '\u041f\u043e\u0434\u0435\u043b\u0438\u0442\u044c\u0441\u044f \u044d\u0442\u0438\u043c \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435\u043c',
+      modalDesc: '\u041b\u044e\u0431\u043e\u0439, \u0443 \u043a\u043e\u0433\u043e \u0435\u0441\u0442\u044c \u044d\u0442\u0430 \u0441\u0441\u044b\u043b\u043a\u0430, \u043c\u043e\u0436\u0435\u0442 \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u0442\u044c \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435.',
     },
   },
 
@@ -390,6 +434,9 @@ const messages = {
       resetAll: 'Zur\u00fccksetzen',
       resetAllData: 'Alle Daten zur\u00fccksetzen',
       language: 'Sprache',
+      shareEvent: 'Teilen',
+      copyLink: 'Link kopieren',
+      linkCopied: 'Kopiert!',
     },
     participants: {
       heading: 'Teilnehmer',
@@ -464,6 +511,7 @@ const messages = {
       validAmount: 'G\u00fcltigen Betrag gr\u00f6\u00dfer als 0 eingeben.',
       selectPayer: 'Bitte ausw\u00e4hlen, wer bezahlt hat.',
       selectParticipants: 'Mindestens einen Teilnehmer f\u00fcr diese Ausgabe ausw\u00e4hlen.',
+      shareLoad: 'Das geteilte Ereignis konnte nicht geladen werden. Der Link ist m\u00f6glicherweise ung\u00fcltig oder abgelaufen.',
     },
     confirms: {
       resetAll: 'Alles zur\u00fccksetzen? Alle Daten werden dauerhaft gel\u00f6scht.',
@@ -471,6 +519,13 @@ const messages = {
     defaults: {
       eventName: 'Mein Ereignis',
       unknown: '(unbekannt)',
+    },
+    share: {
+      readOnlyBanner: 'Sie sehen ein geteiltes Ereignis (nur lesen).',
+      makeACopy: 'Kopie zum Bearbeiten erstellen',
+      copyOf: 'Kopie von {name}',
+      modalTitle: 'Dieses Ereignis teilen',
+      modalDesc: 'Jeder mit diesem Link kann das Ereignis ansehen.',
     },
   },
 
@@ -482,6 +537,9 @@ const messages = {
       resetAll: 'Tout effacer',
       resetAllData: 'R\u00e9initialiser toutes les donn\u00e9es',
       language: 'Langue',
+      shareEvent: 'Partager',
+      copyLink: 'Copier le lien',
+      linkCopied: 'Copi\u00e9\u00a0!',
     },
     participants: {
       heading: 'Participants',
@@ -556,6 +614,7 @@ const messages = {
       validAmount: 'Entrez un montant valide sup\u00e9rieur \u00e0 0.',
       selectPayer: 'Veuillez s\u00e9lectionner qui a pay\u00e9.',
       selectParticipants: 'S\u00e9lectionnez au moins un participant pour cette d\u00e9pense.',
+      shareLoad: "L'\u00e9v\u00e9nement partag\u00e9 n'a pas pu \u00eatre charg\u00e9. Le lien est peut-\u00eatre invalide ou expir\u00e9.",
     },
     confirms: {
       resetAll: 'Tout r\u00e9initialiser et recommencer\u00a0? Toutes les donn\u00e9es seront d\u00e9finitivement perdues.',
@@ -563,6 +622,13 @@ const messages = {
     defaults: {
       eventName: 'Mon \u00e9v\u00e9nement',
       unknown: '(inconnu)',
+    },
+    share: {
+      readOnlyBanner: 'Vous consultez un \u00e9v\u00e9nement partag\u00e9 (lecture seule).',
+      makeACopy: 'Faire une copie pour modifier',
+      copyOf: 'Copie de {name}',
+      modalTitle: 'Partager cet \u00e9v\u00e9nement',
+      modalDesc: 'Toute personne ayant ce lien peut consulter l\u2019\u00e9v\u00e9nement.',
     },
   },
 
@@ -574,6 +640,9 @@ const messages = {
       resetAll: 'Azzera tutto',
       resetAllData: 'Azzera tutti i dati',
       language: 'Lingua',
+      shareEvent: 'Condividi',
+      copyLink: 'Copia link',
+      linkCopied: 'Copiato!',
     },
     participants: {
       heading: 'Partecipanti',
@@ -648,6 +717,7 @@ const messages = {
       validAmount: 'Inserisci un importo valido maggiore di 0.',
       selectPayer: 'Seleziona chi ha pagato.',
       selectParticipants: 'Seleziona almeno un partecipante per dividere la spesa.',
+      shareLoad: "L'evento condiviso non ha potuto essere caricato. Il link potrebbe essere non valido o scaduto.",
     },
     confirms: {
       resetAll: 'Azzerare tutto e ricominciare? Tutti i dati saranno persi definitivamente.',
@@ -655,6 +725,13 @@ const messages = {
     defaults: {
       eventName: 'Il mio evento',
       unknown: '(sconosciuto)',
+    },
+    share: {
+      readOnlyBanner: 'Stai visualizzando un evento condiviso (sola lettura).',
+      makeACopy: 'Crea una copia per modificare',
+      copyOf: 'Copia di {name}',
+      modalTitle: 'Condividi questo evento',
+      modalDesc: 'Chiunque abbia questo link pu\u00f2 visualizzare l\u2019evento.',
     },
   },
 
@@ -666,6 +743,9 @@ const messages = {
       resetAll: 'Reiniciar todo',
       resetAllData: 'Reiniciar todos los datos',
       language: 'Idioma',
+      shareEvent: 'Compartir',
+      copyLink: 'Copiar enlace',
+      linkCopied: '\u00a1Copiado!',
     },
     participants: {
       heading: 'Participantes',
@@ -740,6 +820,7 @@ const messages = {
       validAmount: 'Introduce un importe v\u00e1lido mayor que 0.',
       selectPayer: 'Por favor, selecciona qui\u00e9n pag\u00f3.',
       selectParticipants: 'Selecciona al menos un participante para dividir este gasto.',
+      shareLoad: 'No se pudo cargar el evento compartido. El enlace puede ser inv\u00e1lido o haber caducado.',
     },
     confirms: {
       resetAll: '\u00bfReiniciar todo y empezar de nuevo? Todos los datos se perder\u00e1n permanentemente.',
@@ -747,6 +828,13 @@ const messages = {
     defaults: {
       eventName: 'Mi evento',
       unknown: '(desconocido)',
+    },
+    share: {
+      readOnlyBanner: 'Est\u00e1s viendo un evento compartido (solo lectura).',
+      makeACopy: 'Hacer una copia para editar',
+      copyOf: 'Copia de {name}',
+      modalTitle: 'Compartir este evento',
+      modalDesc: 'Cualquier persona con este enlace puede ver el evento.',
     },
   },
 }

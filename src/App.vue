@@ -12,6 +12,7 @@
           <div v-if="!editingEventName" class="flex items-center gap-1.5">
             <h1 class="text-xl font-bold text-slate-800 leading-none truncate">{{ eventName }}</h1>
             <button
+              v-if="!isReadOnly"
               @click="startEditEventName"
               class="text-slate-400 hover:text-indigo-500 transition-colors flex-shrink-0 p-1"
               :title="$t('header.renameEvent')"
@@ -43,7 +44,8 @@
           <input
             v-model="currency"
             maxlength="5"
-            class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            :disabled="isReadOnly"
+            class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
           />
         </label>
         <!-- Language picker -->
@@ -75,7 +77,21 @@
             </div>
           </div>
         </div>
+        <!-- Share button -->
         <button
+          v-if="hasData && !isReadOnly"
+          @click="share"
+          :disabled="shareLoading"
+          class="flex items-center gap-1 text-indigo-500 hover:text-indigo-700 p-2 rounded-md hover:bg-indigo-50 transition-colors disabled:opacity-50"
+          :title="$t('header.shareEvent')"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+          </svg>
+          <span class="hidden sm:inline text-xs font-medium">{{ $t('header.shareEvent') }}</span>
+        </button>
+        <button
+          v-if="!isReadOnly"
           @click="clearAll"
           class="flex items-center gap-1 text-red-400 hover:text-red-600 p-2 rounded-md hover:bg-red-50 transition-colors"
           :title="$t('header.resetAllData')"
@@ -89,6 +105,25 @@
 
     </div>
   </header>
+
+  <!-- ══════════════════════════════════════════════════ READ-ONLY BANNER -->
+  <div v-if="isReadOnly" class="bg-amber-50 border-b border-amber-200">
+    <div class="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2 text-sm text-amber-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+        </svg>
+        <span>{{ $t('share.readOnlyBanner') }}</span>
+      </div>
+      <button
+        @click="makeCopy"
+        class="flex-shrink-0 text-xs font-semibold text-amber-900 bg-amber-200 hover:bg-amber-300 active:bg-amber-400 px-3 py-1.5 rounded-lg transition-colors"
+      >
+        {{ $t('share.makeACopy') }}
+      </button>
+    </div>
+    <div v-if="shareError" class="max-w-6xl mx-auto px-4 pb-2 text-xs text-red-600">{{ shareError }}</div>
+  </div>
 
   <!-- ════════════════════════════════════════════════════════════════ MAIN -->
   <main class="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -107,7 +142,7 @@
 
         <div class="p-5">
           <!-- Add participant input -->
-          <div class="flex gap-2 mb-3">
+          <div v-if="!isReadOnly" class="flex gap-2 mb-3">
             <input
               v-model="newParticipantName"
               @keyup.enter="addParticipant"
@@ -122,7 +157,7 @@
               {{ $t('participants.add') }}
             </button>
           </div>
-          <p v-if="participantError" class="text-red-500 text-xs mb-3 -mt-1">{{ participantError }}</p>
+          <p v-if="participantError && !isReadOnly" class="text-red-500 text-xs mb-3 -mt-1">{{ participantError }}</p>
 
           <!-- Empty state -->
           <div v-if="participants.length === 0" class="text-center py-5 text-slate-400 text-sm">
@@ -141,6 +176,7 @@
               </span>
               <span class="text-sm text-slate-700 font-medium">{{ p.name }}</span>
               <button
+                v-if="!isReadOnly"
                 @click="removeParticipant(p.id)"
                 :disabled="!canDeleteParticipant(p.id)"
                 :title="canDeleteParticipant(p.id) ? $t('participants.removeTitle') : $t('participants.cantRemoveTitle')"
@@ -168,6 +204,7 @@
             <h2 class="font-semibold text-slate-700">{{ $t('expenses.heading') }}</h2>
           </div>
           <button
+            v-if="!isReadOnly"
             @click="openAddModal"
             :disabled="participants.length === 0"
             :title="participants.length === 0 ? $t('expenses.addParticipantsFirst') : $t('expenses.addNewExpense')"
@@ -215,7 +252,7 @@
               </div>
 
               <!-- Inline delete confirmation -->
-              <div v-if="deleteConfirmId === expense.id" class="flex items-center gap-1.5 flex-shrink-0">
+              <div v-if="deleteConfirmId === expense.id && !isReadOnly" class="flex items-center gap-1.5 flex-shrink-0">
                 <span class="text-xs font-medium text-red-600">{{ $t('expenses.deleteConfirm') }}</span>
                 <button @click="deleteExpense(expense.id)" class="text-xs font-semibold text-white bg-red-500 hover:bg-red-600 active:bg-red-700 px-2.5 py-1.5 rounded-md transition-colors">{{ $t('expenses.yes') }}</button>
                 <button @click="cancelDelete" class="text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-md transition-colors">{{ $t('expenses.no') }}</button>
@@ -225,6 +262,7 @@
               <div class="flex items-center gap-0.5 flex-shrink-0">
                 <span class="font-semibold text-slate-800 mr-1 text-sm">{{ fmt(expense.amount) }}</span>
                 <button
+                  v-if="!isReadOnly"
                   @click="openEditModal(expense)"
                   class="p-2 text-slate-400 hover:text-indigo-500 transition-colors rounded-lg"
                   :title="$t('expenses.editExpense')"
@@ -234,6 +272,7 @@
                   </svg>
                 </button>
                 <button
+                  v-if="!isReadOnly"
                   @click="confirmDelete(expense.id)"
                   class="p-2 text-slate-400 hover:text-red-500 transition-colors rounded-lg"
                   :title="$t('expenses.deleteExpense')"
@@ -409,7 +448,7 @@
 
   <!-- ══════════════════════════════════════ FAB — Add Expense (mobile only) -->
   <button
-    v-if="participants.length > 0"
+    v-if="participants.length > 0 && !isReadOnly"
     @click="openAddModal"
     class="sm:hidden fixed bottom-6 right-6 z-20 w-14 h-14 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-full shadow-xl flex items-center justify-center transition-colors"
     :title="$t('expenses.addExpense')"
@@ -557,6 +596,49 @@
     </div>
   </div><!-- /modal -->
 
+  <!-- ═══════════════════════════════════════════════════════════════ SHARE MODAL -->
+  <div v-if="shareModal" class="modal-backdrop" @click.self="shareModal = false">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="share-modal-title">
+      <div class="w-10 h-1 bg-slate-300 rounded-full mx-auto mb-4 sm:hidden"></div>
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="share-modal-title" class="text-lg font-semibold text-slate-800">{{ $t('share.modalTitle') }}</h3>
+        <button
+          @click="shareModal = false"
+          class="text-slate-400 hover:text-slate-600 transition-colors p-2 rounded-lg"
+          :aria-label="$t('modal.close')"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+      </div>
+      <p class="text-sm text-slate-500 mb-3">{{ $t('share.modalDesc') }}</p>
+      <div class="flex gap-2">
+        <input
+          :value="shareUrl"
+          readonly
+          class="flex-1 border border-slate-200 bg-slate-50 rounded-lg px-3 py-2.5 sm:py-2 text-sm text-slate-600 focus:outline-none select-all truncate"
+          @focus="$event.target.select()"
+        />
+        <button
+          @click="copyShareLink"
+          class="flex-shrink-0 flex items-center gap-1.5 px-4 py-2.5 sm:py-2 text-sm font-semibold rounded-lg transition-colors"
+          :class="shareCopied
+            ? 'bg-emerald-100 text-emerald-700'
+            : 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white'"
+        >
+          <svg v-if="shareCopied" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"/><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"/>
+          </svg>
+          {{ shareCopied ? $t('header.linkCopied') : $t('header.copyLink') }}
+        </button>
+      </div>
+    </div>
+  </div><!-- /share modal -->
+
   <!-- ═══════════════════════════════════════════════════════════════ FOOTER -->
   <footer class="text-center py-6 mt-2">
     <a
@@ -634,7 +716,15 @@ export default {
       deleteConfirmId: null,
 
       // Settlement mode: 'minimize' | 'direct'
-      settlementMode: 'minimize'
+      settlementMode: 'minimize',
+
+      // Share
+      isReadOnly: false,
+      shareModal: false,
+      shareUrl: '',
+      shareLoading: false,
+      shareCopied: false,
+      shareError: '',
     };
   },
 
@@ -817,10 +907,16 @@ export default {
     }
   },
 
-  created() {
-    this.restore();
+  async created() {
     this.$i18n.locale = this.locale;
-    if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+    const shareId = new URLSearchParams(location.search).get('share');
+    if (shareId) {
+      this.isReadOnly = true;
+      await this.loadShared(shareId);
+    } else {
+      this.restore();
+      if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+    }
   },
 
   mounted() {
@@ -835,6 +931,7 @@ export default {
     // ── Persistence ──────────────────────────────────────────────────────────
 
     persist() {
+      if (this.isReadOnly) return;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
           eventName: this.eventName,
@@ -881,6 +978,7 @@ export default {
     onKeyDown(e) {
       if (e.key === 'Escape') {
         if (this.showModal) this.closeModal();
+        else if (this.shareModal) this.shareModal = false;
         else if (this.deleteConfirmId) this.cancelDelete();
         else if (this.editingEventName) this.editingEventName = false;
       }
@@ -1027,7 +1125,69 @@ export default {
         this.deleteConfirmId = null;
         try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
       }
-    }
+    },
+
+    // ── Share ─────────────────────────────────────────────────────────────────
+
+    async share() {
+      this.shareLoading = true;
+      this.shareError = '';
+      try {
+        const res = await fetch('/api/share', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            eventName: this.eventName,
+            currency: this.currency,
+            participants: this.participants,
+            expenses: this.expenses,
+          }),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const { id } = await res.json();
+        this.shareUrl = `${location.origin}/?share=${id}`;
+        this.shareCopied = false;
+        this.shareModal = true;
+      } catch (err) {
+        console.error('share error:', err);
+        this.shareError = this.$t('errors.shareLoad');
+      } finally {
+        this.shareLoading = false;
+      }
+    },
+
+    async loadShared(id) {
+      try {
+        const res = await fetch(`/api/share/${encodeURIComponent(id)}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const d = await res.json();
+        if (typeof d.eventName === 'string') this.eventName = d.eventName;
+        if (typeof d.currency === 'string') this.currency = d.currency;
+        if (Array.isArray(d.participants)) this.participants = d.participants;
+        if (Array.isArray(d.expenses)) this.expenses = d.expenses;
+        if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+      } catch (err) {
+        console.error('loadShared error:', err);
+        this.shareError = this.$t('errors.shareLoad');
+        this.isReadOnly = false;
+        this.restore();
+        if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+      }
+    },
+
+    copyShareLink() {
+      navigator.clipboard.writeText(this.shareUrl).then(() => {
+        this.shareCopied = true;
+        setTimeout(() => { this.shareCopied = false; }, 2000);
+      });
+    },
+
+    makeCopy() {
+      this.eventName = this.$t('share.copyOf', { name: this.eventName });
+      this.isReadOnly = false;
+      this.persist();
+      history.pushState({}, '', '/');
+    },
   }
 };
 </script>
