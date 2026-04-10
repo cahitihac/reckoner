@@ -25,6 +25,10 @@ const messages = {
       shareEvent: 'Share',
       copyLink: 'Copy link',
       linkCopied: 'Copied!',
+      newEvent: 'New event',
+      deleteEvent: 'Delete event',
+      clearAllEvents: 'Clear all events',
+      savedEvents: 'Saved events',
     },
     participants: {
       heading: 'Participants',
@@ -103,6 +107,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Reset everything and start over? All data will be permanently lost.',
+      deleteEvent: 'Delete "{name}"? This cannot be undone.',
+      clearAllEvents: 'Delete all events? This cannot be undone.',
     },
     defaults: {
       eventName: 'My Event',
@@ -128,6 +134,10 @@ const messages = {
       shareEvent: 'Payla\u015f',
       copyLink: 'Ba\u011flant\u0131y\u0131 kopyala',
       linkCopied: 'Kopyaland\u0131!',
+      newEvent: 'Yeni etkinlik',
+      deleteEvent: 'Etkinli\u011fi sil',
+      clearAllEvents: 'T\u00fcm etkinlikleri sil',
+      savedEvents: 'Kaydedilmi\u015f etkinlikler',
     },
     participants: {
       heading: 'Kat\u0131l\u0131mc\u0131lar',
@@ -206,6 +216,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Her \u015fey s\u0131f\u0131rlans\u0131n m\u0131? T\u00fcm veriler kal\u0131c\u0131 olarak silinecek.',
+      deleteEvent: '"{name}" silinsin mi? Bu i\u015flem geri al\u0131namaz.',
+      clearAllEvents: 'T\u00fcm etkinlikler silinsin mi? Bu i\u015flem geri al\u0131namaz.',
     },
     defaults: {
       eventName: 'Etkinli\u011fim',
@@ -231,6 +243,10 @@ const messages = {
       shareEvent: 'Udost\u0119pnij',
       copyLink: 'Kopiuj link',
       linkCopied: 'Skopiowano!',
+      newEvent: 'Nowe wydarzenie',
+      deleteEvent: 'Usuń wydarzenie',
+      clearAllEvents: 'Wyczyść wszystkie wydarzenia',
+      savedEvents: 'Zapisane wydarzenia',
     },
     participants: {
       heading: 'Uczestnicy',
@@ -309,6 +325,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Zresetowa\u0107 wszystko i zacz\u0105\u0107 od nowa? Wszystkie dane zostan\u0105 trwale usuni\u0119te.',
+      deleteEvent: 'Usunąć "{name}"? Tej operacji nie można cofnąć.',
+      clearAllEvents: 'Usunąć wszystkie wydarzenia? Tej operacji nie można cofnąć.',
     },
     defaults: {
       eventName: 'Moje wydarzenie',
@@ -334,6 +352,10 @@ const messages = {
       shareEvent: '\u041f\u043e\u0434\u0435\u043b\u0438\u0442\u044c\u0441\u044f',
       copyLink: '\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0441\u0441\u044b\u043b\u043a\u0443',
       linkCopied: '\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e!',
+      newEvent: '\u041d\u043e\u0432\u043e\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435',
+      deleteEvent: '\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435',
+      clearAllEvents: '\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0432\u0441\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u044f',
+      savedEvents: '\u0421\u043e\u0445\u0440\u0430\u043d\u0451\u043d\u043d\u044b\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u044f',
     },
     participants: {
       heading: '\u0423\u0447\u0430\u0441\u0442\u043d\u0438\u043a\u0438',
@@ -412,6 +434,8 @@ const messages = {
     },
     confirms: {
       resetAll: '\u0421\u0431\u0440\u043e\u0441\u0438\u0442\u044c \u0432\u0441\u0451 \u0438 \u043d\u0430\u0447\u0430\u0442\u044c \u0437\u0430\u043d\u043e\u0432\u043e? \u0412\u0441\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 \u0431\u0443\u0434\u0443\u0442 \u0431\u0435\u0437\u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043d\u043e \u0443\u0434\u0430\u043b\u0435\u043d\u044b.',
+      deleteEvent: '\u0423\u0434\u0430\u043b\u0438\u0442\u044c "{name}"? \u042d\u0442\u043e \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435\u043b\u044c\u0437\u044f \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c.',
+      clearAllEvents: '\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0432\u0441\u0435 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u044f? \u042d\u0442\u043e \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435\u043b\u044c\u0437\u044f \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c.',
     },
     defaults: {
       eventName: '\u041c\u043e\u0451 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0435',
@@ -437,6 +461,10 @@ const messages = {
       shareEvent: 'Teilen',
       copyLink: 'Link kopieren',
       linkCopied: 'Kopiert!',
+      newEvent: 'Neues Ereignis',
+      deleteEvent: 'Ereignis l\u00f6schen',
+      clearAllEvents: 'Alle Ereignisse l\u00f6schen',
+      savedEvents: 'Gespeicherte Ereignisse',
     },
     participants: {
       heading: 'Teilnehmer',
@@ -515,6 +543,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Alles zur\u00fccksetzen? Alle Daten werden dauerhaft gel\u00f6scht.',
+      deleteEvent: '"{name}" l\u00f6schen? Dies kann nicht r\u00fckg\u00e4ngig gemacht werden.',
+      clearAllEvents: 'Alle Ereignisse l\u00f6schen? Dies kann nicht r\u00fckg\u00e4ngig gemacht werden.',
     },
     defaults: {
       eventName: 'Mein Ereignis',
@@ -540,6 +570,10 @@ const messages = {
       shareEvent: 'Partager',
       copyLink: 'Copier le lien',
       linkCopied: 'Copi\u00e9\u00a0!',
+      newEvent: 'Nouvel \u00e9v\u00e9nement',
+      deleteEvent: 'Supprimer l\u2019\u00e9v\u00e9nement',
+      clearAllEvents: 'Effacer tous les \u00e9v\u00e9nements',
+      savedEvents: '\u00c9v\u00e9nements sauvegard\u00e9s',
     },
     participants: {
       heading: 'Participants',
@@ -618,6 +652,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Tout r\u00e9initialiser et recommencer\u00a0? Toutes les donn\u00e9es seront d\u00e9finitivement perdues.',
+      deleteEvent: 'Supprimer "{name}"\u00a0? Cette action est irr\u00e9versible.',
+      clearAllEvents: 'Supprimer tous les \u00e9v\u00e9nements\u00a0? Cette action est irr\u00e9versible.',
     },
     defaults: {
       eventName: 'Mon \u00e9v\u00e9nement',
@@ -643,6 +679,10 @@ const messages = {
       shareEvent: 'Condividi',
       copyLink: 'Copia link',
       linkCopied: 'Copiato!',
+      newEvent: 'Nuovo evento',
+      deleteEvent: 'Elimina evento',
+      clearAllEvents: 'Cancella tutti gli eventi',
+      savedEvents: 'Eventi salvati',
     },
     participants: {
       heading: 'Partecipanti',
@@ -721,6 +761,8 @@ const messages = {
     },
     confirms: {
       resetAll: 'Azzerare tutto e ricominciare? Tutti i dati saranno persi definitivamente.',
+      deleteEvent: 'Eliminare "{name}"? Questa azione non pu\u00f2 essere annullata.',
+      clearAllEvents: 'Eliminare tutti gli eventi? Questa azione non pu\u00f2 essere annullata.',
     },
     defaults: {
       eventName: 'Il mio evento',
@@ -746,6 +788,10 @@ const messages = {
       shareEvent: 'Compartir',
       copyLink: 'Copiar enlace',
       linkCopied: '\u00a1Copiado!',
+      newEvent: 'Nuevo evento',
+      deleteEvent: 'Eliminar evento',
+      clearAllEvents: 'Borrar todos los eventos',
+      savedEvents: 'Eventos guardados',
     },
     participants: {
       heading: 'Participantes',
@@ -824,6 +870,8 @@ const messages = {
     },
     confirms: {
       resetAll: '\u00bfReiniciar todo y empezar de nuevo? Todos los datos se perder\u00e1n permanentemente.',
+      deleteEvent: '\u00bfEliminar "{name}"? Esta acci\u00f3n no se puede deshacer.',
+      clearAllEvents: '\u00bfBorrar todos los eventos? Esta acci\u00f3n no se puede deshacer.',
     },
     defaults: {
       eventName: 'Mi evento',

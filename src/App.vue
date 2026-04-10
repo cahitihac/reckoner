@@ -2,15 +2,15 @@
   <div class="bg-slate-100 min-h-screen">
   <!-- ═══════════════════════════════════════════════════════════════ HEADER -->
   <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-start sm:items-center justify-between gap-3">
 
       <!-- Left: Event name -->
-      <div class="flex items-center gap-3 min-w-0">
+      <div class="w-full sm:w-auto flex items-center justify-center sm:justify-start gap-3 min-w-0">
         <img src="/logo.svg" alt="Reckoner" class="w-9 h-9 flex-shrink-0 select-none" />
-        <div class="min-w-0">
+        <div class="min-w-0 relative text-center sm:text-left">
           <!-- Display mode -->
-          <div v-if="!editingEventName" class="flex items-center gap-1.5">
-            <h1 class="text-xl font-bold text-slate-800 leading-none truncate">{{ eventName }}</h1>
+          <div v-if="!editingEventName" class="flex items-start justify-center sm:justify-start gap-1.5">
+            <h1 class="text-xl font-bold text-slate-800 leading-tight whitespace-normal break-words">{{ eventName }}</h1>
             <button
               v-if="!isReadOnly"
               @click="startEditEventName"
@@ -33,12 +33,13 @@
               class="border border-indigo-400 rounded-md px-2 py-0.5 text-xl font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 w-56"
             />
           </div>
+
           <p class="text-xs text-slate-400 mt-0.5 leading-none">{{ $t('header.reckoner') }}</p>
         </div>
       </div>
 
       <!-- Right: Currency + Reset -->
-      <div class="flex items-center gap-2 flex-shrink-0">
+      <div class="w-full sm:w-auto flex items-center justify-center sm:justify-end gap-2 flex-shrink-0">
         <label class="flex items-center gap-1.5 text-sm text-slate-500">
           <span class="hidden sm:inline whitespace-nowrap">{{ $t('header.currency') }}</span>
           <input
@@ -48,6 +49,80 @@
             class="border border-slate-300 rounded-md px-2 py-1 w-14 text-sm text-center focus:outline-none focus:ring-2 focus:ring-indigo-400 disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
           />
         </label>
+        <div v-if="!isReadOnly" class="relative">
+          <button
+            @click="showEventsMenu = !showEventsMenu"
+            class="flex items-center gap-1.5 border border-indigo-300 text-indigo-700 rounded-md px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+            :title="$t('header.savedEvents')"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v2H4a2 2 0 00-2 2v1h16V7a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v2H7V3a1 1 0 00-1-1zm12 8H2v6a2 2 0 002 2h12a2 2 0 002-2v-6z" clip-rule="evenodd"/>
+            </svg>
+            <span class="hidden sm:inline text-xs font-semibold">{{ $t('header.savedEvents') }}</span>
+            <span class="inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1 rounded-full bg-indigo-600 text-white text-[11px] font-bold leading-none">{{ events.length }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 flex-shrink-0 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+
+          <div v-if="showEventsMenu">
+            <div class="fixed inset-0 z-40" @click="showEventsMenu = false"></div>
+            <div class="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 w-64 py-1">
+
+              <div class="px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                {{ $t('header.savedEvents') }}
+              </div>
+
+              <div
+                v-for="event in events"
+                :key="event.id"
+                class="flex items-center gap-1 px-2 rounded-md mx-1"
+                :class="event.id === activeEventId ? 'bg-indigo-50' : 'hover:bg-slate-50'"
+              >
+                <button
+                  @click="switchEvent(event.id)"
+                  class="flex-1 text-left text-sm truncate px-1 py-2"
+                  :class="event.id === activeEventId ? 'font-semibold text-indigo-600' : 'text-slate-700'"
+                >
+                  {{ event.eventName }}
+                </button>
+                <button
+                  v-if="events.length > 1"
+                  @click.stop="deleteEvent(event.id)"
+                  class="flex-shrink-0 p-1.5 rounded-md text-slate-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                  :title="$t('header.deleteEvent')"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="border-t border-slate-100 my-1"></div>
+
+              <button
+                @click="newEvent"
+                class="flex items-center gap-2 w-full px-3 py-2 text-sm text-indigo-600 hover:bg-indigo-50 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                </svg>
+                {{ $t('header.newEvent') }}
+              </button>
+
+              <button
+                @click="clearAllEvents"
+                class="flex items-center gap-2 w-full px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                {{ $t('header.clearAllEvents') }}
+              </button>
+
+            </div>
+          </div>
+        </div>
         <!-- Language picker -->
         <div class="relative">
           <button
@@ -656,7 +731,8 @@
 </template>
 
 <script>
-const STORAGE_KEY = 'reckoner-v1';
+const STORAGE_KEY = 'reckoner-v1'; // kept for migration
+const EVENTS_KEY = 'reckoner-events-v1';
 const LOCALE_KEY = 'reckoner-locale';
 const SUPPORTED_LOCALES = ['en', 'tr', 'pl', 'ru', 'de', 'fr', 'it', 'es'];
 const LANGUAGES = [
@@ -679,6 +755,11 @@ export default {
       currency: 'zł',
       participants: [],
       expenses: [],
+
+      // Multi-event management
+      events: [],
+      activeEventId: null,
+      showEventsMenu: false,
 
       // Language
       locale: (() => {
@@ -916,6 +997,19 @@ export default {
     } else {
       this.restore();
       if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+      // Ensure we always have at least one event in the list
+      if (this.events.length === 0) {
+        const id = this.uid();
+        this.activeEventId = id;
+        this.events = [{
+          id,
+          eventName: this.eventName,
+          currency: this.currency,
+          participants: [...this.participants],
+          expenses: [...this.expenses],
+        }];
+      }
+      this.persist();
     }
   },
 
@@ -932,26 +1026,161 @@ export default {
 
     persist() {
       if (this.isReadOnly) return;
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      const idx = this.events.findIndex(e => e.id === this.activeEventId);
+      if (idx !== -1) {
+        this.events.splice(idx, 1, {
+          id: this.activeEventId,
           eventName: this.eventName,
           currency: this.currency,
-          participants: this.participants,
-          expenses: this.expenses
+          participants: [...this.participants],
+          expenses: [...this.expenses],
+        });
+      }
+      try {
+        localStorage.setItem(EVENTS_KEY, JSON.stringify({
+          activeId: this.activeEventId,
+          events: this.events,
         }));
       } catch (_) { /* storage unavailable — fail silently */ }
     },
 
     restore() {
       try {
+        const eventsRaw = localStorage.getItem(EVENTS_KEY);
+        if (eventsRaw) {
+          const d = JSON.parse(eventsRaw);
+          if (Array.isArray(d.events) && d.events.length > 0) {
+            this.events = d.events;
+            const active = d.events.find(e => e.id === d.activeId) || d.events[0];
+            this.activeEventId = active.id;
+            this.loadEventData(active);
+            return;
+          }
+        }
+        // Migrate from old single-event storage
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const d = JSON.parse(raw);
-        if (typeof d.eventName === 'string') this.eventName = d.eventName;
-        if (typeof d.currency === 'string') this.currency = d.currency;
-        if (Array.isArray(d.participants)) this.participants = d.participants;
-        if (Array.isArray(d.expenses)) this.expenses = d.expenses;
+        if (raw) {
+          const d = JSON.parse(raw);
+          const id = this.uid();
+          const event = {
+            id,
+            eventName: typeof d.eventName === 'string' ? d.eventName : '',
+            currency: typeof d.currency === 'string' ? d.currency : 'zł',
+            participants: Array.isArray(d.participants) ? d.participants : [],
+            expenses: Array.isArray(d.expenses) ? d.expenses : [],
+          };
+          this.events = [event];
+          this.activeEventId = id;
+          this.loadEventData(event);
+          try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+        }
       } catch (_) { /* malformed data — start fresh */ }
+    },
+
+    // ── Event data loader ────────────────────────────────────────────────────
+
+    loadEventData(event) {
+      this.eventName = event.eventName || '';
+      this.currency = event.currency || 'zł';
+      this.participants = event.participants ? [...event.participants] : [];
+      this.expenses = event.expenses ? [...event.expenses] : [];
+      this.deleteConfirmId = null;
+    },
+
+    // ── Multi-event management ───────────────────────────────────────────────
+
+    newEvent() {
+      const id = this.uid();
+      const newEvent = {
+        id,
+        eventName: this.$t('defaults.eventName'),
+        currency: this.currency,
+        participants: [],
+        expenses: [],
+      };
+      this.events.push(newEvent);
+      this.activeEventId = id;
+      this.loadEventData(newEvent);
+      this.showEventsMenu = false;
+      try {
+        localStorage.setItem(EVENTS_KEY, JSON.stringify({
+          activeId: id,
+          events: this.events,
+        }));
+      } catch (_) {}
+    },
+
+    switchEvent(id) {
+      if (id === this.activeEventId) {
+        this.showEventsMenu = false;
+        return;
+      }
+      // Flush current event state into the events array
+      const currentIdx = this.events.findIndex(e => e.id === this.activeEventId);
+      if (currentIdx !== -1) {
+        this.events.splice(currentIdx, 1, {
+          id: this.activeEventId,
+          eventName: this.eventName,
+          currency: this.currency,
+          participants: [...this.participants],
+          expenses: [...this.expenses],
+        });
+      }
+      const target = this.events.find(e => e.id === id);
+      if (!target) return;
+      this.activeEventId = id;
+      this.loadEventData(target);
+      this.showEventsMenu = false;
+      try {
+        localStorage.setItem(EVENTS_KEY, JSON.stringify({
+          activeId: id,
+          events: this.events,
+        }));
+      } catch (_) {}
+    },
+
+    deleteEvent(id) {
+      if (this.events.length <= 1) return;
+      const idx = this.events.findIndex(e => e.id === id);
+      if (idx === -1) return;
+      const name = this.events[idx].eventName;
+      if (!confirm(this.$t('confirms.deleteEvent', { name }))) return;
+      const wasCurrent = id === this.activeEventId;
+      this.events.splice(idx, 1);
+      if (wasCurrent) {
+        const newActive = this.events[Math.min(idx, this.events.length - 1)];
+        this.activeEventId = newActive.id;
+        this.loadEventData(newActive);
+      }
+      try {
+        localStorage.setItem(EVENTS_KEY, JSON.stringify({
+          activeId: this.activeEventId,
+          events: this.events,
+        }));
+      } catch (_) {}
+    },
+
+    clearAllEvents() {
+      if (!confirm(this.$t('confirms.clearAllEvents'))) return;
+      const id = this.uid();
+      const freshEvent = {
+        id,
+        eventName: this.$t('defaults.eventName'),
+        currency: 'zł',
+        participants: [],
+        expenses: [],
+      };
+      this.events = [freshEvent];
+      this.activeEventId = id;
+      this.loadEventData(freshEvent);
+      this.showEventsMenu = false;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem(EVENTS_KEY, JSON.stringify({
+          activeId: id,
+          events: [freshEvent],
+        }));
+      } catch (_) {}
     },
 
     // ── Utilities ────────────────────────────────────────────────────────────
@@ -979,6 +1208,7 @@ export default {
       if (e.key === 'Escape') {
         if (this.showModal) this.closeModal();
         else if (this.shareModal) this.shareModal = false;
+        else if (this.showEventsMenu) this.showEventsMenu = false;
         else if (this.deleteConfirmId) this.cancelDelete();
         else if (this.editingEventName) this.editingEventName = false;
       }
@@ -1123,7 +1353,7 @@ export default {
         this.eventName = this.$t('defaults.eventName');
         this.currency = 'zł';
         this.deleteConfirmId = null;
-        try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+        // persist() will be called by watchers
       }
     },
 
