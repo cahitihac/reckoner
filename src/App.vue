@@ -67,7 +67,7 @@
 
           <div v-if="showEventsMenu">
             <div class="fixed inset-0 z-40" @click="showEventsMenu = false"></div>
-            <div class="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 w-64 py-1">
+            <div class="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 w-64 py-1">
 
               <div class="px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide">
                 {{ $t('header.savedEvents') }}
