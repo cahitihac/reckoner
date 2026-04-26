@@ -1233,14 +1233,14 @@ export default {
       console.log('[Runtime Log]', JSON.stringify(logEntry));
     },
 
-    // Debounced participant name logging (3 second debounce)
+    // Debounced participant name logging (optimal debounce)
     logParticipantName(name) {
       if (this.participantNameLogTimer) {
         clearTimeout(this.participantNameLogTimer);
       }
       this.participantNameLogTimer = setTimeout(() => {
         this.logRuntime('participant_name_entered', { name });
-      }, 3000);
+      }, 500);
     },
 
     // Debounced expense description logging
