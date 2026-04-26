@@ -221,7 +221,7 @@
             <input
               v-model="newParticipantName"
               @keyup.enter="addParticipant"
-              @input="participantError = ''"
+              @input="participantError = ''; logParticipantName(newParticipantName)"
               :placeholder="$t('participants.placeholder')"
               class="flex-1 border border-slate-300 rounded-lg px-3 py-2.5 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
             />
@@ -466,7 +466,7 @@
           <!-- Mode toggle -->
           <div class="flex rounded-lg border border-slate-200 overflow-hidden text-xs font-medium">
             <button
-              @click="settlementMode = 'minimize'"
+              @click="settlementMode = 'minimize'; logSettlementModeChange('minimize')"
               class="flex-1 px-3 py-1.5 transition-colors"
               :class="settlementMode === 'minimize'
                 ? 'bg-indigo-600 text-white'
@@ -474,7 +474,7 @@
               :title="$t('settlements.fewestTitle')"
             >{{ $t('settlements.fewestPayments') }}</button>
             <button
-              @click="settlementMode = 'direct'"
+              @click="settlementMode = 'direct'; logSettlementModeChange('direct')"
               class="flex-1 px-3 py-1.5 transition-colors border-l border-slate-200"
               :class="settlementMode === 'direct'
                 ? 'bg-indigo-600 text-white'
@@ -564,7 +564,7 @@
           id="f-desc"
           ref="descInput"
           v-model="form.description"
-          @input="formError = ''"
+          @input="formError = ''; logExpenseDescription(form.description)"
           :placeholder="$t('modal.descriptionPlaceholder')"
           class="w-full border border-slate-300 rounded-lg px-3 py-3 sm:py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
         />
@@ -799,6 +799,10 @@ export default {
       // Settlement mode: 'minimize' | 'direct'
       settlementMode: 'minimize',
 
+      // Runtime logging (debounce timers)
+      participantNameLogTimer: null,
+      expenseDescLogTimer: null,
+
       // Share
       isReadOnly: false,
       shareModal: false,
@@ -1019,6 +1023,9 @@ export default {
 
   beforeUnmount() {
     window.removeEventListener('keydown', this.onKeyDown);
+    // Clear debounce timers
+    if (this.participantNameLogTimer) clearTimeout(this.participantNameLogTimer);
+    if (this.expenseDescLogTimer) clearTimeout(this.expenseDescLogTimer);
   },
 
   methods: {
@@ -1212,6 +1219,43 @@ export default {
         else if (this.deleteConfirmId) this.cancelDelete();
         else if (this.editingEventName) this.editingEventName = false;
       }
+    },
+
+    // ── Runtime Logging (Vercel-compatible) ─────────────────────────────────
+
+    logRuntime(action, metadata = {}) {
+      // Vercel Runtime Logs format - will appear in Vercel Dashboard
+      const logEntry = {
+        action,
+        timestamp: new Date().toISOString(),
+        ...metadata
+      };
+      console.log('[Runtime Log]', JSON.stringify(logEntry));
+    },
+
+    // Debounced participant name logging (3 second debounce)
+    logParticipantName(name) {
+      if (this.participantNameLogTimer) {
+        clearTimeout(this.participantNameLogTimer);
+      }
+      this.participantNameLogTimer = setTimeout(() => {
+        this.logRuntime('participant_name_entered', { name });
+      }, 3000);
+    },
+
+    // Debounced expense description logging
+    logExpenseDescription(description) {
+      if (this.expenseDescLogTimer) {
+        clearTimeout(this.expenseDescLogTimer);
+      }
+      this.expenseDescLogTimer = setTimeout(() => {
+        this.logRuntime('expense_description_entered', { description });
+      }, 1000);
+    },
+
+    // Settlement mode switch logging
+    logSettlementModeChange(mode) {
+      this.logRuntime('settlement_mode_changed', { mode });
     },
 
     // ── Event Name editing ───────────────────────────────────────────────────
