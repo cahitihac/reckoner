@@ -125,7 +125,7 @@
       </section>
 
       <section class="border-y border-slate-200 bg-slate-50">
-        <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div v-for="item in landingBenefits" :key="item.title" class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
             <div class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -1008,6 +1008,11 @@ export default {
           title: this.$t('landing.benefitPrivateTitle'),
           text: this.$t('landing.benefitPrivateText'),
           icon: 'M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z',
+        },
+        {
+          title: this.$t('landing.benefitNoLoginTitle'),
+          text: this.$t('landing.benefitNoLoginText'),
+          icon: 'M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v-2l3.257-3.257A6 6 0 1118 8zm-6-2a2 2 0 100 4 2 2 0 000-4z',
         },
       ];
     },
