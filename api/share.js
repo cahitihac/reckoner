@@ -31,6 +31,8 @@ export default async function handler(req, res) {
   const data = {
     eventName: body.eventName.slice(0, 200),
     currency: body.currency.slice(0, 10),
+    createdAt: typeof body.createdAt === 'string' ? body.createdAt.slice(0, 50) : '',
+    updatedAt: typeof body.updatedAt === 'string' ? body.updatedAt.slice(0, 50) : '',
     participants: body.participants.slice(0, 200).map(p => ({
       id: String(p.id ?? '').slice(0, 50),
       name: String(p.name ?? '').slice(0, 200),

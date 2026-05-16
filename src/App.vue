@@ -1,5 +1,160 @@
 <template>
   <div class="bg-slate-100 min-h-screen">
+  <section v-if="showLanding" class="min-h-screen bg-white">
+    <header class="border-b border-slate-200 bg-white/95 sticky top-0 z-10">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <img src="/logo.svg" alt="Reckoner" class="w-9 h-9 flex-shrink-0 select-none" />
+          <span class="text-lg font-bold text-slate-900 truncate">Reckoner</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <button
+              @click="showLangMenu = !showLangMenu"
+              class="flex items-center gap-1 border border-slate-300 rounded-md px-2 py-1 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors"
+              :title="$t('header.language')"
+            >
+              <span class="text-base leading-none">{{ currentLang.flag }}</span>
+              <span class="hidden sm:inline text-xs text-slate-600">{{ currentLang.name }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="hidden sm:block h-3 w-3 text-slate-400 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <div v-if="showLangMenu">
+              <div class="fixed inset-0 z-40" @click="showLangMenu = false"></div>
+              <div class="absolute right-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 py-1 min-w-max">
+                <button
+                  v-for="lang in languages"
+                  :key="lang.code"
+                  @click="locale = lang.code; showLangMenu = false"
+                  class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left hover:bg-slate-50 transition-colors"
+                  :class="locale === lang.code ? 'font-semibold text-indigo-600' : 'text-slate-700'"
+                >
+                  <span>{{ lang.flag }}</span>
+                  <span>{{ lang.name }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button
+            @click="startApp"
+            class="inline-flex items-center justify-center rounded-md bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 active:bg-slate-950 transition-colors"
+          >
+            {{ $t('landing.openApp') }}
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="max-w-6xl mx-auto px-4 pt-10 pb-12 lg:pt-16 lg:pb-16 grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 items-center">
+        <div class="max-w-2xl">
+          <p class="text-sm font-semibold text-indigo-600 mb-3">{{ $t('landing.eyebrow') }}</p>
+          <h1 class="text-4xl sm:text-5xl font-bold tracking-normal text-slate-950 leading-tight">
+            {{ $t('landing.title') }}
+          </h1>
+          <p class="mt-5 text-lg text-slate-600 leading-8">
+            {{ $t('landing.subtitle') }}
+          </p>
+          <div class="mt-7 flex flex-col sm:flex-row gap-3">
+            <button
+              @click="startApp"
+              class="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 text-base font-semibold text-white hover:bg-indigo-700 active:bg-indigo-800 transition-colors"
+            >
+              {{ $t('landing.cta') }}
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-950 text-white rounded-xl shadow-2xl overflow-hidden border border-slate-800">
+          <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <img src="/logo.svg" alt="" class="w-7 h-7 select-none" />
+              <span class="text-sm font-semibold">Reckoner</span>
+            </div>
+            <span class="text-xs text-slate-400">{{ $t('landing.previewEvent') }}</span>
+          </div>
+          <div class="p-4 space-y-4">
+            <div class="grid grid-cols-3 gap-2">
+              <div class="rounded-lg bg-slate-900 border border-slate-800 p-3">
+                <p class="text-[11px] text-slate-400">{{ $t('participants.heading') }}</p>
+                <p class="mt-1 text-xl font-bold">4</p>
+              </div>
+              <div class="rounded-lg bg-slate-900 border border-slate-800 p-3">
+                <p class="text-[11px] text-slate-400">{{ $t('expenses.heading') }}</p>
+                <p class="mt-1 text-xl font-bold">7</p>
+              </div>
+              <div class="rounded-lg bg-slate-900 border border-slate-800 p-3">
+                <p class="text-[11px] text-slate-400">{{ $t('expenses.totalSpent') }}</p>
+                <p class="mt-1 text-xl font-bold">zł428</p>
+              </div>
+            </div>
+            <div class="rounded-lg bg-white text-slate-900 p-4">
+              <div class="flex items-center justify-between text-sm">
+                <span class="font-semibold">{{ $t('balances.heading') }}</span>
+                <span class="text-xs text-emerald-600">{{ $t('landing.livePreview') }}</span>
+              </div>
+              <div class="mt-4 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-slate-600">Alex</span>
+                  <span class="text-sm font-semibold text-emerald-600">+zł84.50</span>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full w-3/4 bg-emerald-500 rounded-full"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-slate-600">Mina</span>
+                  <span class="text-sm font-semibold text-red-600">-zł31.25</span>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full w-1/3 bg-red-500 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-lg bg-amber-50 border border-amber-200 p-3 text-slate-900">
+              <p class="text-xs font-semibold text-amber-800">{{ $t('settlements.heading') }}</p>
+              <p class="mt-1 text-sm">{{ $t('landing.previewSettlement') }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-y border-slate-200 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div v-for="item in landingBenefits" :key="item.title" class="bg-white rounded-lg border border-slate-200 p-5 shadow-sm">
+            <div class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" :d="item.icon" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <h2 class="text-base font-semibold text-slate-900">{{ item.title }}</h2>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{{ item.text }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="max-w-6xl mx-auto px-4 py-12">
+        <div class="max-w-2xl">
+          <p class="text-sm font-semibold text-indigo-600 mb-2">{{ $t('landing.howEyebrow') }}</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-950">{{ $t('landing.howTitle') }}</h2>
+        </div>
+        <div class="mt-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div v-for="(step, index) in landingSteps" :key="step.title" class="rounded-lg border border-slate-200 bg-white p-5">
+            <span class="inline-flex w-8 h-8 items-center justify-center rounded-full bg-slate-900 text-white text-sm font-bold">{{ index + 1 }}</span>
+            <h3 class="mt-4 text-base font-semibold text-slate-900">{{ step.title }}</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600">{{ step.text }}</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <template v-else>
   <!-- ═══════════════════════════════════════════════════════════════ HEADER -->
   <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-10">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-start sm:items-center justify-between gap-3">
@@ -34,7 +189,15 @@
             />
           </div>
 
-          <p class="text-xs text-slate-400 mt-0.5 leading-none">{{ $t('header.reckoner') }}</p>
+          <div class="mt-0.5 space-y-0.5 text-xs text-slate-400 leading-tight">
+            <p>{{ $t('header.reckoner') }}</p>
+            <p v-if="currentEventCreatedAt">
+              {{ $t('header.createdOn') }} {{ fmtDateTime(currentEventCreatedAt) }}
+            </p>
+            <p v-if="currentEventUpdatedAt">
+              {{ $t('header.updatedOn') }} {{ fmtDateTime(currentEventUpdatedAt) }}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -67,7 +230,7 @@
 
           <div v-if="showEventsMenu">
             <div class="fixed inset-0 z-40" @click="showEventsMenu = false"></div>
-            <div class="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 w-64 py-1">
+            <div class="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 top-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 w-80 max-w-[calc(100vw-2rem)] py-1">
 
               <div class="px-3 py-1.5 text-xs font-semibold text-slate-400 uppercase tracking-wide">
                 {{ $t('header.savedEvents') }}
@@ -81,10 +244,16 @@
               >
                 <button
                   @click="switchEvent(event.id)"
-                  class="flex-1 text-left text-sm truncate px-1 py-2"
+                  class="flex-1 text-left px-1 py-2 min-w-0"
                   :class="event.id === activeEventId ? 'font-semibold text-indigo-600' : 'text-slate-700'"
                 >
-                  {{ event.eventName }}
+                  <span class="block text-sm truncate">{{ event.eventName }}</span>
+                  <span class="block mt-0.5 text-[11px] font-normal text-slate-400 leading-tight">
+                    {{ $t('header.createdOn') }} {{ fmtDateTime(event.createdAt) }}
+                  </span>
+                  <span class="block text-[11px] font-normal text-slate-400 leading-tight">
+                    {{ $t('header.updatedOn') }} {{ fmtDateTime(event.updatedAt) }}
+                  </span>
                 </button>
                 <button
                   v-if="events.length > 1"
@@ -726,6 +895,7 @@
       Buy me a coffee
     </a>
   </footer>
+  </template>
 
   </div><!-- /root -->
 </template>
@@ -755,6 +925,10 @@ export default {
       currency: 'zł',
       participants: [],
       expenses: [],
+      currentEventCreatedAt: '',
+      currentEventUpdatedAt: '',
+      suppressPersist: false,
+      showLanding: true,
 
       // Multi-event management
       events: [],
@@ -816,6 +990,43 @@ export default {
   computed: {
     currentLang() {
       return this.languages.find(l => l.code === this.locale) || this.languages[0];
+    },
+
+    landingBenefits() {
+      return [
+        {
+          title: this.$t('landing.benefitFastTitle'),
+          text: this.$t('landing.benefitFastText'),
+          icon: 'M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.293 12.293a1 1 0 101.414 1.414l2-2A1 1 0 0011 11V7z',
+        },
+        {
+          title: this.$t('landing.benefitFairTitle'),
+          text: this.$t('landing.benefitFairText'),
+          icon: 'M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005 7.999V9a1 1 0 01-2 0V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0015 12.001V11a1 1 0 112 0v6a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z',
+        },
+        {
+          title: this.$t('landing.benefitPrivateTitle'),
+          text: this.$t('landing.benefitPrivateText'),
+          icon: 'M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z',
+        },
+      ];
+    },
+
+    landingSteps() {
+      return [
+        {
+          title: this.$t('landing.stepPeopleTitle'),
+          text: this.$t('landing.stepPeopleText'),
+        },
+        {
+          title: this.$t('landing.stepExpensesTitle'),
+          text: this.$t('landing.stepExpensesText'),
+        },
+        {
+          title: this.$t('landing.stepSettleTitle'),
+          text: this.$t('landing.stepSettleText'),
+        },
+      ];
     },
 
     participantMap() {
@@ -997,13 +1208,16 @@ export default {
     const shareId = new URLSearchParams(location.search).get('share');
     if (shareId) {
       this.isReadOnly = true;
+      this.showLanding = false;
       await this.loadShared(shareId);
     } else {
+      this.showLanding = location.hash !== '#app';
       this.restore();
       if (!this.eventName) this.eventName = this.$t('defaults.eventName');
       // Ensure we always have at least one event in the list
       if (this.events.length === 0) {
         const id = this.uid();
+        const now = new Date().toISOString();
         this.activeEventId = id;
         this.events = [{
           id,
@@ -1011,7 +1225,11 @@ export default {
           currency: this.currency,
           participants: [...this.participants],
           expenses: [...this.expenses],
+          createdAt: now,
+          updatedAt: now,
         }];
+        this.currentEventCreatedAt = now;
+        this.currentEventUpdatedAt = now;
       }
       this.persist();
     }
@@ -1031,18 +1249,34 @@ export default {
   methods: {
     // ── Persistence ──────────────────────────────────────────────────────────
 
-    persist() {
-      if (this.isReadOnly) return;
-      const idx = this.events.findIndex(e => e.id === this.activeEventId);
-      if (idx !== -1) {
-        this.events.splice(idx, 1, {
-          id: this.activeEventId,
-          eventName: this.eventName,
-          currency: this.currency,
-          participants: [...this.participants],
-          expenses: [...this.expenses],
-        });
-      }
+    normalizeEvent(event) {
+      const now = new Date().toISOString();
+      const createdAt = typeof event.createdAt === 'string' && event.createdAt ? event.createdAt : now;
+      const updatedAt = typeof event.updatedAt === 'string' && event.updatedAt ? event.updatedAt : createdAt;
+      return {
+        id: event.id || this.uid(),
+        eventName: typeof event.eventName === 'string' ? event.eventName : '',
+        currency: typeof event.currency === 'string' ? event.currency : 'zł',
+        participants: Array.isArray(event.participants) ? event.participants : [],
+        expenses: Array.isArray(event.expenses) ? event.expenses : [],
+        createdAt,
+        updatedAt,
+      };
+    },
+
+    eventSnapshot({ id, createdAt, updatedAt }) {
+      return {
+        id,
+        eventName: this.eventName,
+        currency: this.currency,
+        participants: [...this.participants],
+        expenses: [...this.expenses],
+        createdAt,
+        updatedAt,
+      };
+    },
+
+    saveEvents() {
       try {
         localStorage.setItem(EVENTS_KEY, JSON.stringify({
           activeId: this.activeEventId,
@@ -1051,16 +1285,34 @@ export default {
       } catch (_) { /* storage unavailable — fail silently */ }
     },
 
+    persist() {
+      if (this.isReadOnly || this.suppressPersist) return;
+      const idx = this.events.findIndex(e => e.id === this.activeEventId);
+      if (idx !== -1) {
+        const updatedAt = new Date().toISOString();
+        const createdAt = this.events[idx].createdAt || this.currentEventCreatedAt || updatedAt;
+        this.currentEventCreatedAt = createdAt;
+        this.currentEventUpdatedAt = updatedAt;
+        this.events.splice(idx, 1, this.eventSnapshot({
+          id: this.activeEventId,
+          createdAt,
+          updatedAt,
+        }));
+      }
+      this.saveEvents();
+    },
+
     restore() {
       try {
         const eventsRaw = localStorage.getItem(EVENTS_KEY);
         if (eventsRaw) {
           const d = JSON.parse(eventsRaw);
           if (Array.isArray(d.events) && d.events.length > 0) {
-            this.events = d.events;
-            const active = d.events.find(e => e.id === d.activeId) || d.events[0];
+            this.events = d.events.map(event => this.normalizeEvent(event));
+            const active = this.events.find(e => e.id === d.activeId) || this.events[0];
             this.activeEventId = active.id;
             this.loadEventData(active);
+            this.saveEvents();
             return;
           }
         }
@@ -1069,16 +1321,20 @@ export default {
         if (raw) {
           const d = JSON.parse(raw);
           const id = this.uid();
+          const now = new Date().toISOString();
           const event = {
             id,
             eventName: typeof d.eventName === 'string' ? d.eventName : '',
             currency: typeof d.currency === 'string' ? d.currency : 'zł',
             participants: Array.isArray(d.participants) ? d.participants : [],
             expenses: Array.isArray(d.expenses) ? d.expenses : [],
+            createdAt: now,
+            updatedAt: now,
           };
           this.events = [event];
           this.activeEventId = id;
           this.loadEventData(event);
+          this.saveEvents();
           try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
         }
       } catch (_) { /* malformed data — start fresh */ }
@@ -1087,34 +1343,36 @@ export default {
     // ── Event data loader ────────────────────────────────────────────────────
 
     loadEventData(event) {
+      this.suppressPersist = true;
       this.eventName = event.eventName || '';
       this.currency = event.currency || 'zł';
       this.participants = event.participants ? [...event.participants] : [];
       this.expenses = event.expenses ? [...event.expenses] : [];
+      this.currentEventCreatedAt = event.createdAt || '';
+      this.currentEventUpdatedAt = event.updatedAt || event.createdAt || '';
       this.deleteConfirmId = null;
+      this.$nextTick(() => { this.suppressPersist = false; });
     },
 
     // ── Multi-event management ───────────────────────────────────────────────
 
     newEvent() {
       const id = this.uid();
+      const now = new Date().toISOString();
       const newEvent = {
         id,
         eventName: this.$t('defaults.eventName'),
         currency: this.currency,
         participants: [],
         expenses: [],
+        createdAt: now,
+        updatedAt: now,
       };
       this.events.push(newEvent);
       this.activeEventId = id;
       this.loadEventData(newEvent);
       this.showEventsMenu = false;
-      try {
-        localStorage.setItem(EVENTS_KEY, JSON.stringify({
-          activeId: id,
-          events: this.events,
-        }));
-      } catch (_) {}
+      this.saveEvents();
     },
 
     switchEvent(id) {
@@ -1125,25 +1383,19 @@ export default {
       // Flush current event state into the events array
       const currentIdx = this.events.findIndex(e => e.id === this.activeEventId);
       if (currentIdx !== -1) {
-        this.events.splice(currentIdx, 1, {
+        const current = this.events[currentIdx];
+        this.events.splice(currentIdx, 1, this.eventSnapshot({
           id: this.activeEventId,
-          eventName: this.eventName,
-          currency: this.currency,
-          participants: [...this.participants],
-          expenses: [...this.expenses],
-        });
+          createdAt: current.createdAt || this.currentEventCreatedAt || new Date().toISOString(),
+          updatedAt: this.currentEventUpdatedAt || current.updatedAt || current.createdAt || new Date().toISOString(),
+        }));
       }
       const target = this.events.find(e => e.id === id);
       if (!target) return;
       this.activeEventId = id;
       this.loadEventData(target);
       this.showEventsMenu = false;
-      try {
-        localStorage.setItem(EVENTS_KEY, JSON.stringify({
-          activeId: id,
-          events: this.events,
-        }));
-      } catch (_) {}
+      this.saveEvents();
     },
 
     deleteEvent(id) {
@@ -1159,23 +1411,21 @@ export default {
         this.activeEventId = newActive.id;
         this.loadEventData(newActive);
       }
-      try {
-        localStorage.setItem(EVENTS_KEY, JSON.stringify({
-          activeId: this.activeEventId,
-          events: this.events,
-        }));
-      } catch (_) {}
+      this.saveEvents();
     },
 
     clearAllEvents() {
       if (!confirm(this.$t('confirms.clearAllEvents'))) return;
       const id = this.uid();
+      const now = new Date().toISOString();
       const freshEvent = {
         id,
         eventName: this.$t('defaults.eventName'),
         currency: 'zł',
         participants: [],
         expenses: [],
+        createdAt: now,
+        updatedAt: now,
       };
       this.events = [freshEvent];
       this.activeEventId = id;
@@ -1183,10 +1433,7 @@ export default {
       this.showEventsMenu = false;
       try {
         localStorage.removeItem(STORAGE_KEY);
-        localStorage.setItem(EVENTS_KEY, JSON.stringify({
-          activeId: id,
-          events: [freshEvent],
-        }));
+        this.saveEvents();
       } catch (_) {}
     },
 
@@ -1201,6 +1448,16 @@ export default {
       if (isNaN(n)) return this.currency + '0.00';
       const sign = n < 0 ? '-' : '';
       return sign + this.currency + Math.abs(n).toFixed(2);
+    },
+
+    fmtDateTime(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return new Intl.DateTimeFormat(this.locale, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+      }).format(date);
     },
 
     initial(name) {
@@ -1256,6 +1513,12 @@ export default {
     // Settlement mode switch logging
     logSettlementModeChange(mode) {
       this.logRuntime('settlement_mode_changed', { mode });
+    },
+
+    startApp() {
+      this.showLanding = false;
+      this.showLangMenu = false;
+      if (location.hash !== '#app') history.pushState({}, '', '#app');
     },
 
     // ── Event Name editing ───────────────────────────────────────────────────
@@ -1415,6 +1678,8 @@ export default {
             currency: this.currency,
             participants: this.participants,
             expenses: this.expenses,
+            createdAt: this.currentEventCreatedAt,
+            updatedAt: this.currentEventUpdatedAt,
           }),
         });
         if (!res.ok) throw new Error(await res.text());
@@ -1439,7 +1704,11 @@ export default {
         if (typeof d.currency === 'string') this.currency = d.currency;
         if (Array.isArray(d.participants)) this.participants = d.participants;
         if (Array.isArray(d.expenses)) this.expenses = d.expenses;
+        if (typeof d.createdAt === 'string') this.currentEventCreatedAt = d.createdAt;
+        if (typeof d.updatedAt === 'string') this.currentEventUpdatedAt = d.updatedAt;
         if (!this.eventName) this.eventName = this.$t('defaults.eventName');
+        if (!this.currentEventCreatedAt) this.currentEventCreatedAt = new Date().toISOString();
+        if (!this.currentEventUpdatedAt) this.currentEventUpdatedAt = this.currentEventCreatedAt;
       } catch (err) {
         console.error('loadShared error:', err);
         this.shareError = this.$t('errors.shareLoad');
@@ -1459,6 +1728,16 @@ export default {
     makeCopy() {
       this.eventName = this.$t('share.copyOf', { name: this.eventName });
       this.isReadOnly = false;
+      const id = this.uid();
+      const now = new Date().toISOString();
+      this.activeEventId = id;
+      this.currentEventCreatedAt = now;
+      this.currentEventUpdatedAt = now;
+      this.events = [this.eventSnapshot({
+        id,
+        createdAt: now,
+        updatedAt: now,
+      })];
       this.persist();
       history.pushState({}, '', '/');
     },
